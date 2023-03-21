@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre Commande{% endblock %}
+
+{% block body %}
+    {# Titre de la page Commande #}
+    <h2 class="font-medium leading-tight text-3xl text-gray-600 text-center mt-5 uppercase">Votre commande</h2>
+
+    {# Container de la page #}
+    <div class="flex flex-row flex-wrap justify-evenly">
+        <div class="flex flex-col flex-wrap p-6">
+            {# Début du formulaire #}
+            {{ form_start(form) }}
+            
+            {# Choix de la livraison #}
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600"><i class="fa-solid fa-location-dot"></i> Choix de la livraison</h3>
+            <span>{{ form_row(form.address)|replace({'[-br]' : '</br>'})|raw }}</span>
+
+            {# Mode de livraison #}
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600"><i class="fa-solid fa-truck-fast"></i> Mode de livraison</h3>
+            <span>{{ form_row(form.delivery)|replace({'[-br]' : '</br>'})|raw }}</span>
+        </div>
+
+        {# Bloc du récapitulatif de la commande #}
+        <div class="flex flex-col flex-wrap p-6">
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600">Récapitulatif de la commande</h3>
+
+            {# On récupère la quantité de produit dans la variable recapCart #}
+            {% set articleCount = 0 %}
+            {% for item in recapCart %}
+                {% set articleCount = articleCount + item.quantity %}
+            {% endfor %}
+            {# On affiche le nombre d'article(s) #}
+            {{ articleCount > 1 ? ' (' ~ articleCount ~ ' articles)' : ' (' ~ articleCount  ~ ' article)' }}
+
+            {# Séparateur #}
+            <hr class="mt-5">
+
+            {% set total = null %}
+            {% for product in recapCart %}
+            {# Total #}
+            {% set total = total + product.product.price * product.quantity %}
+            <div class="flex flex-row py-4">
+                <div class="flex flex-col">
+                    {# Image #}
+                    <img src="{{ vich_uploader_asset(product.product, 'imageFile') }}" width="80" height="80" alt="{{ product.product.title }}">
+                </div>
+                <div class="flex flex-col flex-wrap px-6">
+                    {# Nom du produit #}
+                    <span>{{ product.product.title }}</span>*
+                    {# Quantité #}
+                    <span>Quantité : <strong>x{{ product.quantity }}</strong></span>
+                    {# Prix #}
+                    <span>Prix : <strong>{{ product.product.price }} €</strong></span>
+                </div>
+            </div>
+            {% endfor %}
+
+            {# Séparateur #}
+            <hr>
+
+            {# Bloc du total de la commande #}
+            <div class="flex justify-between mt-5">
+                <span class="font-bold text-2xl">Total :</span>
+                <span class="font-bold text-2xl">{{ total|number_format(2, ',', '') }} €</span>
+            </div>
+            <div class="flex justify-between">
+                <button class="inline-block mt-5 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Procéder au paiement</button>
+
+                {# Fin du formulaire #}
+                {{ form_end(form) }}
+
+                <a href="{{ path('order.delete') }}" class="inline-block">
+                    <button class="inline-block mt-5 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

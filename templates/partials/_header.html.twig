@@ -1,0 +1,58 @@
+<nav class="relative w-full flex flex-wrap items-center py-4 shadow-lg">
+      <div class="container-fluid w-full flex flex-wrap items-center justify-between px-6">
+            <div class="flex items-center relative">
+                  {# Boutton d'accueil #}
+                  <a class="py-2 px-4 font-normal block w-full whitespace-nowrap" href="{{ path('index') }}">
+                        <i class="fa-solid fa-house fa-2x"></i>
+                  </a>
+                  {# Si authentification #}
+                  {% if app.user %}
+                        <div class="dropdown relative px-6">
+                              <button type="button" data-mdb-ripple="true" data-mdb-ripple-color="light"  data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user fa-2x"></i>
+                              </button>
+                              {# Dropdown #}
+                              <ul class="dropdown-menu min-w-max absolute hidden bg-white text-base z-50 float-left py-2 list-none text-left shadow-lg mt-1 m-0 bg-clip-padding border-none left-auto right-0" aria-labelledby="dropdownMenuButton2">
+                                    {# Si USER #}
+                                    {% if 'ROLE_ADMIN' not in app.user.roles %}
+                                          <li>
+                                                <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('user.index') }}">
+                                                Mon compte
+                                                </a>
+                                          </li>
+                                    {% endif %}
+
+                                    {# Si ADMIN #}
+                                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                                          <li>
+                                                <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('admin') }}">
+                                                Administration
+                                                </a>
+                                          </li>
+                                    {% endif %}
+
+                                    {# Boutton de deconnexion #}
+                                    <li>
+                                          <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('security.logout') }}">
+                                          Déconnexion
+                                          </a>
+                                    </li>
+                              </ul>
+                        </div>
+                        
+                  {% else %}
+                        {# Boutton de connexion #}
+                        <a class="py-2 px-4 font-normal block w-full whitespace-nowrap" href="{{ path('security.login') }}">
+                              <i class="fa-solid fa-right-to-bracket fa-2x"></i>
+                        </a>
+                  {% endif %}
+            </div>
+
+            {# Logo #}
+            <h1 class="mt-0 mb-2 text-5xl font-medium leading-tight">La Pizzeria</h1>
+
+            {# Boutton du panier #}
+            <a href="{{ path('cart') }}">
+                  <i class="fa-solid fa-shopping-cart fa-2x"></i>
+            </a>
+      </div>
+</nav>

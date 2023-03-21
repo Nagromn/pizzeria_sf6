@@ -1,0 +1,28 @@
+<div class="rounded-lg shadow-lg bg-white my-5">
+      <div class="p-6">
+            <div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Nom / Prénom : {{ app.user.fullname }}</div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Pseudo : {{ app.user.username }}</div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Adresse : {{ app.user.address }}</div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Code Postal : {{ app.user.zipcode }}</div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Ville : {{ app.user.city }}</div>
+                  <div class="flex">
+                        <a href="{{ path('user.edit', { id: app.user.id }) }}">
+                                    <button type="button" class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Modifier</button>
+                        </a>
+                  </div>
+            </div>
+            <div class="mt-5">
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Email : {{ app.user.email }}
+                        <a href="{{ path('user.edit.email', { id: app.user.id }) }}">
+                                    <button type="button" class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Modifier</button>
+                        </a>
+                  </div>
+                  <div class="font-medium leading-tight text-3xl mt-0 mb-2 text-gray-600">Mot de passe : ********** 
+                        <a href="{{ path('user.edit.password', { id: app.user.id }) }}">
+                              <button type="button" class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Modifier</button>
+                        </a>
+                  </div>
+            </div>
+      </div>
+</div>

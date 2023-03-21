@@ -1,0 +1,14 @@
+vich_uploader:
+  db_driver: orm
+
+  metadata:
+    type: attribute
+
+  mappings:
+    product_thumbnails:
+      uri_prefix: "%product_thumbnails%"
+      upload_destination: "%kernel.project_dir%/public%product_thumbnails%"
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      inject_on_load: false
+      delete_on_update: true
+      delete_on_remove: true
