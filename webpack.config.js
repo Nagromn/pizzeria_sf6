@@ -8,6 +8,10 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
 
+  // enables Sass/SCSS support
+  .enableSassLoader()
+  .enablePostCssLoader()
+
   // CKEditor
   .copyFiles([
     {
@@ -44,10 +48,6 @@ Encore
   .setPublicPath("/build")
   // only needed for CDN's or subdirectory deploy
   //.setManifestKeyPrefix('build/')
-
-  // enables Sass/SCSS support
-  .enableSassLoader()
-  .enablePostCssLoader()
 
   /*
    * ENTRY CONFIG

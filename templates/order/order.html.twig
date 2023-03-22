@@ -6,12 +6,33 @@
     {# Titre de la page Commande #}
     <h2 class="font-medium leading-tight text-3xl text-gray-600 text-center mt-5 uppercase">Votre commande</h2>
 
+    {# Breackcrumb #}
+    <nav class="flex justify-center w-full rounded-md mt-5">
+        <ol class="list-reset flex">
+            <li class="text-neutral-600 dark:text-neutral-400">
+                <a href="{{path('index')}}">Accueil</a>
+            </li>
+            <li>
+                <span class="text-neutral-500 dark:text-neutral-400 mx-5">></span>
+            </li>
+            <li class="text-neutral-600 dark:text-neutral-400">
+                <a href="{{path('cart')}}">Panier</a>
+            </li>
+            <li>
+                <span class="text-neutral-500 dark:text-neutral-400 mx-5">></span>
+            </li>
+            <li>
+                <a href="{{path('order')}}">Création de la commande</a>
+            </li>
+        </ol>
+    </nav>
+
     {# Container de la page #}
     <div class="flex flex-row flex-wrap justify-evenly">
         <div class="flex flex-col flex-wrap p-6">
             {# Début du formulaire #}
             {{ form_start(form) }}
-            
+
             {# Choix de la livraison #}
             <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600"><i class="fa-solid fa-location-dot"></i> Choix de la livraison</h3>
             <span>{{ form_row(form.address)|replace({'[-br]' : '</br>'})|raw }}</span>
@@ -47,7 +68,7 @@
                 </div>
                 <div class="flex flex-col flex-wrap px-6">
                     {# Nom du produit #}
-                    <span>{{ product.product.title }}</span>*
+                    <span>{{ product.product.title }}</span>
                     {# Quantité #}
                     <span>Quantité : <strong>x{{ product.quantity }}</strong></span>
                     {# Prix #}
