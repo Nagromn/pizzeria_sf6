@@ -1,0 +1,75 @@
+{# Container du carousel #}
+<div id="carouselExampleIndicators" class="relative" data-te-carousel-init data-te-carousel-slide>
+      <div class="absolute right-0 bottom-0 left-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0" data-te-carousel-indicators>
+            {# Boutons sliders des photos #}
+            <button
+                  type="button"
+                  data-te-target="#carouselExampleIndicators"
+                  data-te-slide-to="0"
+                  data-te-carousel-active
+                  class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+                  aria-current="true"
+                  aria-label="Slide 1">
+            </button>
+            <button
+                  type="button"
+                  data-te-target="#carouselExampleIndicators"
+                  data-te-slide-to="1"
+                  class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+                  aria-label="Slide 2">
+            </button>
+            <button
+                  type="button"
+                  data-te-target="#carouselExampleIndicators"
+                  data-te-slide-to="2"
+                  class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+                  aria-label="Slide 3">
+            </button>
+      </div>
+
+      {# Images du carousel #}
+      <div class="relative w-full overflow-hidden after:clear-both after:block after:content-[''] rounded-xl mt-10">
+            <div class="relative float-left -mr-[100%] w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none" data-te-carousel-item data-te-carousel-active>
+                  <img src="{{ asset('assets/img/slider/slider-1.png') }}" class="block w-full" alt="Slide 1" />
+                  <div class="absolute bottom-20 left-40">
+                        <a href="" class="inline-block border-2 border-custom-violet rounded-full py-6 px-10 bg-transaparent text-custom-violet font-bold text-lg leading-tight uppercase shadow-md  hover:shadow-lg hover:text-white hover:border-white focus:outline-none focus:ring-0">
+                              <i class="fa-solid fa-chevron-right mr-1"></i> Commander
+                        </a>
+                  </div>
+            </div>
+            <div class="relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none" data-te-carousel-item>
+                  <img src="{{ asset('assets/img/slider/slider-2.png') }}" class="block w-full" alt="Slide 2" />
+                  <div class="absolute bottom-20 left-40">
+                         <a href="" class="inline-block border-2 border-custom-violet rounded-full py-6 px-10 bg-transaparent text-custom-violet font-bold text-lg leading-tight uppercase shadow-md  hover:shadow-lg hover:text-white hover:border-white focus:outline-none focus:ring-0">
+                              <i class="fa-solid fa-chevron-right mr-1"></i> Commander
+                        </a>
+                  </div>
+            </div>
+            <div class="relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none" data-te-carousel-item>
+                  <img src="{{ asset('assets/img/slider/slider-3.png') }}" class="block w-full" alt="Slide 3" />
+                  <div class="absolute bottom-20 left-40">
+                         <a href="" class="inline-block border-2 border-custom-violet rounded-full py-6 px-10 bg-transaparent text-custom-violet font-bold text-lg leading-tight uppercase shadow-md hover:text-custom-dark-orange hover:border-custom-dark-orange focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
+                              <i class="fa-solid fa-chevron-right mr-1"></i> Commander
+                        </a>
+                  </div>
+            </div>
+      </div>
+
+      {# Bouton de navigation #}
+      <button class="absolute top-0 bottom-0 left-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-custom-violet opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:no-underline hover:opacity-90 hover:outline-none focus:text-custom-violet focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none" type="button" data-te-target="#carouselExampleIndicators" data-te-slide="prev">
+            {# Indicateurs de navigation 'Previous' #}
+            <span class="inline-block h-8 w-8">
+                  {# Indicateur de navigation #}
+                  <i class="fa-solid fa-chevron-left fa-lg"></i>
+            </span>
+            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Previous</span>
+      </button>
+      <button class="absolute top-0 bottom-0 right-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-custom-violet opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:no-underline hover:opacity-90 hover:outline-none focus:text-custom-violet focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none" type="button" data-te-target="#carouselExampleIndicators" data-te-slide="next">
+            {# Indicateurs de navigation 'Next' #}
+            <span class="inline-block h-8 w-8">
+                  {# Indicateur de navigation #}
+                  <i class="fa-solid fa-chevron-right fa-lg"></i>
+            </span>
+            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Next</span>
+      </button>
+</div>

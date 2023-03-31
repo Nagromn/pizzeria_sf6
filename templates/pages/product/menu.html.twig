@@ -1,0 +1,165 @@
+{# Import base.html.twig #}
+{% extends "base.html.twig" %}
+
+{% block title %}Notre carte{% endblock %}
+
+{% block body %}
+<div class="container mx-auto">
+
+      {# Navigation secondaire #}
+      {% include "components/_subnavigation.html.twig" %}
+
+      <div class="block max-w-full rounded-3xl bg-white shadow-full my-10 py-10">
+            <h3 class="text-center leading-tight font-bold text-custom-violet text-4xl mb-10">Notre carte</h3>
+
+            {# Boutons de navigation #}
+            <ul class="flex justify-center list-none flex-wrap md:flex-row mb-10"
+            id="pills-tab"
+            role="tablist"
+            data-te-nav-ref>
+                  <li class="mx-5 my-2" role="presentation">
+                        <a href="#pills-home" class="inline-block border-2 border-custom-violet rounded-full py-1 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-gradient-to-r from-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 focus:text-white focus:border-white active:to-custom-light-orange active:shadow-lg transition duration-150 ease-in-out"
+                        id="pills-home-tab"
+                        data-te-toggle="pill"
+                        data-te-target="#pills-home"
+                        data-te-nav-active
+                        role="tab"
+                        aria-controls="pills-home"
+                        aria-selected="true">Tous</a>
+                  </li>
+                  <li class="mx-5 my-2" role="presentation">
+                        <a href="#pills-profile" class="inline-block border-2 border-custom-violet rounded-full py-1 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-gradient-to-r from-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 focus:text-white focus:border-white active:to-custom-light-orange active:shadow-lg transition duration-150 ease-in-out"
+                        id="pills-profile-tab"
+                        data-te-toggle="pill"
+                        data-te-target="#pills-profile"
+                        role="tab"
+                        aria-controls="pills-profile"
+                        aria-selected="false">Pizzas</a>
+                  </li>
+                  <li class="mx-5 my-2" role="presentation">
+                        <a href="#pills-contact" class="inline-block border-2 border-custom-violet rounded-full py-1 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-gradient-to-r from-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 focus:text-white focus:border-white active:to-custom-light-orange active:shadow-lg transition duration-150 ease-in-out"
+                        id="pills-contact-tab"
+                        data-te-toggle="pill"
+                        data-te-target="#pills-contact"
+                        role="tab"
+                        aria-controls="pills-contact"
+                        aria-selected="false">Boissons</a>
+                  </li>
+                  <li class="mx-5 my-2" role="presentation">
+                        <a href="#pills-test" class="inline-block border-2 border-custom-violet rounded-full py-1 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-gradient-to-r from-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 focus:text-white focus:border-white active:to-custom-light-orange active:shadow-lg transition duration-150 ease-in-out"
+                        id="pills-test-tab"
+                        data-te-toggle="pill"
+                        data-te-target="#pills-test"
+                        role="tab"
+                        aria-controls="pills-test"
+                        aria-selected="false">Desserts</a>
+                  </li>
+            </ul>
+
+            {# Tous #}
+            <div class="hidden transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+            id="pills-home"
+            role="tabpanel"
+            aria-labelledby="pills-home-tab"
+            data-te-tab-active>
+                  <div class="flex flex-row flex-wrap justify-evenly">
+                        {% for product in products %}
+                              <div class="flex flex-col items-center max-w-xs rounded-lg bg-gray-100 text-custom-violet p-6 shadow-lg m-5 relative">
+                                    <div class="absolute top-0 right-0">
+                                          <a href="{{ path('cart.add', { id: product.id }) }}" class="inline-block border-2 rounded-full px-2 py-1 bg-transaparent text-white font-bold leading-tight shadow-md bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg 
+                                          hover:scale-150 focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-500 ease-in-out"><i class="fa-solid fa-plus text-sm"></i>
+                                          </a>
+                                    </div>
+                                    <a href="{{ path('product.show', {'slug': product.slug}) }}">
+                                          <img class="rounded-full" width="270" height="270" src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="{{ product.title }}"/>
+                                    </a>
+                                    <h5 class="mt-2 text-xl font-medium leading-tight">
+                                          {{ product.title }}
+                                    </h5>
+                                    <span class="mt-1 text-2xl">{{ product.price }}€</span>
+                                    <span class="mt-2 text-center">{{ product.description|raw }}</span>
+                              </div>
+                        {% endfor %}
+                  </div>
+            </div>
+
+            {# Pizzas #}
+            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+            id="pills-profile"
+            role="tabpanel"
+            aria-labelledby="pills-profile-tab">
+                  <div class="flex flex-row flex-wrap justify-evenly">
+                        {% for pizza in pizzas %}
+                              <div class="flex flex-col items-center max-w-xs rounded-lg bg-gray-100 text-custom-violet p-6 shadow-lg m-5 relative">
+                                          <div class="absolute top-0 right-0">
+                                                <a href="{{ path('cart.add', { id: pizza.id }) }}" class="inline-block border-2 rounded-full px-2 py-1 bg-transaparent text-white font-bold leading-tight shadow-md bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg 
+                                                hover:scale-150 focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-500 ease-in-out"><i class="fa-solid fa-plus text-sm"></i>
+                                                </a>
+                                          </div>
+                                          <a href="{{ path('product.show', {'slug': pizza.slug}) }}">
+                                                <img class="rounded-full" width="270" height="270" src="{{ vich_uploader_asset(pizza, 'imageFile') }}" alt="{{ pizza.title }}"/>
+                                          </a>
+                                          <h5 class="mt-2 text-xl font-medium leading-tight">
+                                                {{ pizza.title }}
+                                          </h5>
+                                          <span class="mt-1 text-2xl">{{ pizza.price }}€</span>
+                                          <span class="mt-2 text-center">{{ pizza.description|raw }}</span>
+                                    </div>
+                        {% endfor %}
+                  </div>
+            </div>
+
+            {# Boissons #}
+            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+            id="pills-contact"
+            role="tabpanel"
+            aria-labelledby="pills-contact-tab">
+                  <div class="flex flex-row flex-wrap justify-evenly">
+                        {% for drink in drinks %}
+                              <div class="flex flex-col items-center max-w-xs rounded-lg bg-gray-100 text-custom-violet p-6 shadow-lg m-5 relative">
+                                          <div class="absolute top-0 right-0">
+                                                <a href="{{ path('cart.add', { id: drink.id }) }}" class="inline-block border-2 rounded-full px-2 py-1 bg-transaparent text-white font-bold leading-tight shadow-md bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg 
+                                                hover:scale-150 focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-500 ease-in-out"><i class="fa-solid fa-plus text-sm"></i>
+                                                </a>
+                                          </div>
+                                          <a href="{{ path('product.show', {'slug': drink.slug}) }}">
+                                                <img class="rounded-full" width="270" height="270" src="{{ vich_uploader_asset(drink, 'imageFile') }}" alt="{{ drink.title }}"/>
+                                          </a>
+                                          <h5 class="mt-2 text-xl font-medium leading-tight">
+                                                {{ drink.title }}
+                                          </h5>
+                                          <span class="mt-1 text-2xl">{{ drink.price }}€</span>
+                                          <span class="mt-2 text-center">{{ drink.description|raw }}</span>
+                                    </div>
+                        {% endfor %}
+                  </div>
+            </div>
+
+            {# Desserts #}
+            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+            id="pills-test"
+            role="tabpanel"
+            aria-labelledby="pills-test-tab">
+                  <div class="flex flex-row flex-wrap justify-evenly">
+                        {% for dessert in desserts %}
+                              <div class="flex flex-col items-center max-w-xs rounded-lg bg-gray-100 text-custom-violet p-6 shadow-lg m-5 relative">
+                                          <div class="absolute top-0 right-0">
+                                                <a href="{{ path('cart.add', { id: dessert.id }) }}" class="inline-block border-2 rounded-full px-2 py-1 bg-transaparent text-white font-bold leading-tight shadow-md bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg 
+                                                hover:scale-150 focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-500 ease-in-out"><i class="fa-solid fa-plus text-sm"></i>
+                                                </a>
+                                          </div>
+                                          <a href="{{ path('product.show', {'slug': dessert.slug}) }}">
+                                                <img class="rounded-full" width="270" height="270" src="{{ vich_uploader_asset(dessert, 'imageFile') }}" alt="{{ dessert.title }}"/>
+                                          </a>
+                                          <h5 class="mt-2 text-xl font-medium leading-tight">
+                                                {{ dessert.title }}
+                                          </h5>
+                                          <span class="mt-1 text-2xl">{{ dessert.price }}€</span>
+                                          <span class="mt-2 text-center">{{ dessert.description|raw }}</span>
+                                    </div>
+                        {% endfor %}
+                  </div>
+            </div>
+      </div>
+</div>
+{% endblock %}

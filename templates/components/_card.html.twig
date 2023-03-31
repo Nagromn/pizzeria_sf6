@@ -1,30 +1,14 @@
-{# Cards #}
-<div class="flex flex-col justify-between rounded-lg shadow-lg bg-white max-w-sm my-5">
-      <div class="flex flex-col justify-start">
-            <img class="rounded-t-lg" src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="{{ product.title }}"/>
-            <div class="p-6">
-                  {# Titre #}
-                  <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600">{{ product.title }}</h3>
-
-                  {# Description #}
-                  <p class="text-gray-700 text-base mb-4">
-                        {{ product.description|u.truncate(160, '...')|raw }}
-                  </p>
+{# Bloc 'Notre Sélection #}
+<div class="flex flex-row flex-wrap justify-between py-5">
+      <div class="flex flex-col justify-center">
+            <div class="flex justify-center">
+                  <h3 class="font-bold leading-tight text-2xl text-custom-violet">{{ product.title }}</h3>
             </div>
-      </div>
-      <div class="flex flex-row flex-wrap justify-center">
-            {# Prix #}
-            <div class="flex flex-col">
-                  <span class="font-bold text-2xl">{{ product.price }} €</span>
+            <div class="flex justify-center mt-5">
+                  <img class="rounded-full w-50px" width="270" height="270" src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="{{ product.title }}"/>
             </div>
-
-            {# Boutons en bas des cards #}
-            <div class="p-6">
-                  <a href="{{ path('product.show', {'slug': product.slug}) }}">
-                        <button type="button" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Voir détails</button>
-                  </a>
-                  <a href="{{ path('cart.add', { id: product.id }) }}" type="button">
-                        <button type="button" class="inline-block align-center px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Ajouter au panier</button>
+            <div class="flex justify-center mt-5">
+                  <a href="{{ path('product.show', {'slug': product.slug}) }}" class="inline-block border-2 border-custom-violet rounded-full py-4 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">En savoir <i class="fa-solid fa-plus text-sm"></i>
                   </a>
             </div>
       </div>

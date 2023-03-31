@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Aller";
+  src: url("../../public/assets/fonts/Aller/Aller_Bd.woff") format("woff");
+}

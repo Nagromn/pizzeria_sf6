@@ -1,19 +1,29 @@
 {# Boutons Pizzas, Boissons et Desserts #}
-<div class="flex flex-row flex-wrap justify-evenly my-5">
-      <a href="{{ path('index') }}">
-            <button type="button" data-mdb-ripple="true"
-            data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Tous nos produits</button>
-      </a>
-      <a href="{{ path('product.pizzas') }}">
-            <button type="button" data-mdb-ripple="true"
-            data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">🍕 Nos pizzas</button>
-      </a>
-      <a href="{{ path('product.drinks') }}">
-            <button type="button" data-mdb-ripple="true"
-            data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">🍹 Nos boissons</button>
-      </a>
-      <a href="{{ path('product.desserts') }}">
-            <button type="button" data-mdb-ripple="true"
-                        data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">🍨 Nos desserts</button>
-      </a>
+<div class="flex flex-row items-center justify-center my-10">
+      {# Pizzas #}
+      <div class="flex flex-col justify-center items-center rounded-3xl bg-gradient-to-b from-custom-dark-orange to-custom-light-orange w-1/3 h-80 mr-5">
+            <img class="w-36" src="{{ asset('assets/img/icons/picto-01.svg') }}" alt="">
+            <h3 class="font-bold leading-tight text-2xl text-center text-custom-violet">Pizzas</h3>
+            <div class="flex justify-center mt-2">
+                  <a href="{{ path('product.pizzas') }}" class="inline-block rounded-full px-4 py-3 border-2 border-custom-violet bg-custom-violet text-white font-bold text-xl leading-tight uppercase shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out"><i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+      </div>
+
+      {# Boissons #}
+      <div class="flex flex-col justify-center items-center rounded-3xl bg-gradient-to-b from-custom-dark-orange to-custom-light-orange w-1/3 h-80 ml-5 mr-5">
+            <img class="w-36" src="{{ asset('assets/img/icons/picto-03.svg') }}" alt="">
+            <h3 class="font-bold leading-tight text-2xl text-center text-custom-violet">Boissons</h3>
+            <div class="flex justify-center mt-2">
+                  <a href="{{ path('product.drinks') }}" class="inline-block rounded-full px-4 py-3 border-2 border-custom-violet bg-custom-violet text-white font-bold text-xl leading-tight uppercase shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out"><i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+      </div>
+
+      {# Desserts #}
+      <div class="flex flex-col justify-center items-center rounded-3xl bg-gradient-to-b from-custom-dark-orange to-custom-light-orange w-1/3 h-80 ml-5">
+            <img class="w-36" src="{{ asset('assets/img/icons/picto-02.svg') }}" alt="">
+            <h3 class="font-bold leading-tight text-2xl text-center text-custom-violet">Desserts</h3>
+            <div class="flex justify-center mt-2">
+                  <a href="{{ path('product.desserts') }}" class="inline-block rounded-full px-4 py-3 border-2 border-custom-violet bg-custom-violet text-white font-bold text-xl leading-tight uppercase shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out"><i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+      </div>
 </div>

@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+// const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: [
     "./src/**/*.{html,js}",
@@ -8,13 +11,16 @@ module.exports = {
     "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
-    colors: {
-      red: "#DC3545",
+    extend: {
+      colors: {
+        "custom-violet": "#6d184e",
+        "custom-dark-orange": "#ed6d3f",
+        "custom-light-orange": "#fbc57f",
+      },
+      fontFamily: {
+        aller: ["Aller", "sans-serif"],
+      },
     },
-    extend: {},
   },
-  plugins: [
-    require("tw-elements/dist/plugin"),
-    require("@tailwindcss/forms"),
-  ],
+  plugins: [require("tw-elements/dist/plugin"), require("@tailwindcss/forms")],
 };

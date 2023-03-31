@@ -4,47 +4,48 @@
 
 {% block body %}
     {# Titre de la page Commande #}
-    <h2 class="font-medium leading-tight text-3xl text-gray-600 text-center mt-5 uppercase">Votre commande</h2>
+    <h2 class="font-medium leading-tight text-2xl text-custom-violet text-center mt-5 uppercase">Votre commande</h2>
 
     {# Breackcrumb #}
-    <nav class="flex justify-center w-full rounded-md mt-5">
+    <nav class="flex justify-center w-full rounded-md mt-5 mb-2">
         <ol class="list-reset flex">
-            <li class="text-neutral-600 dark:text-neutral-400">
+            <li class="text-custom-violet">
                 <a href="{{path('index')}}">Accueil</a>
             </li>
             <li>
-                <span class="text-neutral-500 dark:text-neutral-400 mx-5">></span>
+                <span class="text-custom-violet mx-5">></span>
             </li>
-            <li class="text-neutral-600 dark:text-neutral-400">
+            <li class="text-custom-violet">
                 <a href="{{path('cart')}}">Panier</a>
             </li>
-            <li>
-                <span class="text-neutral-500 dark:text-neutral-400 mx-5">></span>
+             <li>
+                <span class="text-custom-violet mx-5">></span>
             </li>
-            <li>
-                <a href="{{path('order')}}">Création de la commande</a>
+            <li class="text-custom-dark-orange underline">
+                <a href="{{path('cart')}}">Récapitulatif de commande</a>
             </li>
         </ol>
     </nav>
 
+
     {# Container de la page #}
-    <div class="flex flex-row flex-wrap justify-evenly">
+    <div class="flex flex-row flex-wrap justify-center">
         <div class="flex flex-col flex-wrap p-6">
             {# Début du formulaire #}
             {{ form_start(form) }}
 
             {# Choix de la livraison #}
-            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600"><i class="fa-solid fa-location-dot"></i> Choix de la livraison</h3>
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-location-dot"></i> Choix de la livraison</h3>
             <span>{{ form_row(form.address)|replace({'[-br]' : '</br>'})|raw }}</span>
 
             {# Mode de livraison #}
-            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600"><i class="fa-solid fa-truck-fast"></i> Mode de livraison</h3>
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-truck-fast"></i> Mode de livraison</h3>
             <span>{{ form_row(form.delivery)|replace({'[-br]' : '</br>'})|raw }}</span>
         </div>
 
         {# Bloc du récapitulatif de la commande #}
         <div class="flex flex-col flex-wrap p-6">
-            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-gray-600">Récapitulatif de la commande</h3>
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet">Récapitulatif de la commande</h3>
 
             {# On récupère la quantité de produit dans la variable recapCart #}
             {% set articleCount = 0 %}
@@ -52,7 +53,7 @@
                 {% set articleCount = articleCount + item.quantity %}
             {% endfor %}
             {# On affiche le nombre d'article(s) #}
-            {{ articleCount > 1 ? ' (' ~ articleCount ~ ' articles)' : ' (' ~ articleCount  ~ ' article)' }}
+            <span class="text-custom-violet text-end">{{ articleCount > 1 ? ' (' ~ articleCount ~ ' articles)' : ' (' ~ articleCount  ~ ' article)' }}</span>
 
             {# Séparateur #}
             <hr class="mt-5">
@@ -85,14 +86,15 @@
                 <span class="font-bold text-2xl">Total :</span>
                 <span class="font-bold text-2xl">{{ total|number_format(2, ',', '') }} €</span>
             </div>
-            <div class="flex justify-between">
-                <button class="inline-block mt-5 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Procéder au paiement</button>
+            <div class="flex justify-between mt-5">
+                <a href="" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Procéder au paiement
+                </a>
 
                 {# Fin du formulaire #}
                 {{ form_end(form) }}
 
-                <a href="{{ path('order.delete') }}" class="inline-block">
-                    <button class="inline-block mt-5 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+                <a href="{{ path('order.delete') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
+                    <i class="fa-solid fa-trash-can"></i>
                 </a>
             </div>
         </div>

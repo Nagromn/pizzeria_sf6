@@ -26,6 +26,24 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get all products
+     *
+     * @param int $page
+     * @return array
+     */
+    public function findAllProducts(int $page): PaginationInterface
+    {
+        $data = $this->createQueryBuilder('p')
+            ->where('p.isVending = 1')
+            ->getQuery()
+            ->getResult();
+
+        $products = $this->paginatorInterface->paginate($data, $page, 10);
+
+        return $products;
+    }
+
+    /**
      * Get all pizzas
      *
      * @param int $page

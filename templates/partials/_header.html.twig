@@ -1,58 +1,88 @@
-<nav class="relative w-full flex flex-wrap items-center py-4 shadow-lg">
-      <div class="container-fluid w-full flex flex-wrap items-center justify-between px-6">
-            <div class="flex items-center relative">
-                  {# Boutton d'accueil #}
-                  <a class="py-2 px-4 font-normal block w-full whitespace-nowrap" href="{{ path('index') }}">
-                        <i class="fa-solid fa-house fa-2x"></i>
-                  </a>
-                  {# Si authentification #}
-                  {% if app.user %}
-                        <div class="dropdown relative px-6">
-                              <button type="button" data-mdb-ripple="true" data-mdb-ripple-color="light"  data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user fa-2x"></i>
-                              </button>
-                              {# Dropdown #}
-                              <ul class="dropdown-menu min-w-max absolute hidden bg-white text-base z-50 float-left py-2 list-none text-left shadow-lg mt-1 m-0 bg-clip-padding border-none left-auto right-0" aria-labelledby="dropdownMenuButton2">
-                                    {# Si USER #}
-                                    {% if 'ROLE_ADMIN' not in app.user.roles %}
-                                          <li>
-                                                <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('user.index') }}">
-                                                Mon compte
-                                                </a>
-                                          </li>
-                                    {% endif %}
+<nav class="flex-no-wrap relative flex w-full items-center justify-between bg-custom-violet py-4 shadow-md shadow-black/5 dark:shadow-black/10 lg:flex-wrap lg:justify-start" data-te-navbar-ref>
+      <div class="flex w-full flex-wrap items-center justify-between px-6">
+            <!-- Left links -->
+            <div class="flex justify-center">
+                  <div class="xl:w-96">
+                        {# Newsletter #}
+                        <div class="relative flex w-full flex-wrap items-stretch ">
+                              <input class="relative rounded-full m-0 block w-64 min-w-0 flex-auto border-2 border-white bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-white outline-none transition duration-300 ease-in-out placeholder:text-white" placeholder="S'abonner à la newsletter" aria-label="Search" aria-describedby="button-addon2" />
+                              <a href="" class="input-group-text flex items-center whitespace-nowrap rounded px-3 py-1.5 text-center text-base font-normal text-white"
+                              id="basic-addon2">OK</a>
+                        </div>
+                  </div>
+            </div>
+            <!-- Left links -->
 
+            <!-- Collapsible wrapper -->
+
+            <!-- Right elements -->
+            <div class="relative flex items-center">
+                  <!-- Icons -->
+                  {# Boutton du panier #}
+                  <div class="mx-5">
+                        <a class="flex items-center" href="{{ path('cart') }}">
+                              <img class="w-12" src="{{ asset('assets/img/icons/picto-05.png') }}" alt="Cart icon">
+                              <span class="text-white">Mon Panier</span>
+                        </a>
+                  </div>
+                  {# DropDown #}
+                  <div class="relative" data-te-dropdown-ref>
+                        <a class="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none" href="#" id="dropdownMenuButton2" role="button" data-te-dropdown-toggle-ref aria-expanded="false">
+                              <img class="w-12" src="{{ asset('assets/img/icons/picto-04.png') }}" alt="User icon">
+                              {# Affiche un message d'accueil quand l'utilisateur est connecté #}
+                              {% if app.user %}
+                                    <span class="text-white">Bonjour, {{ app.user.username }} !</span>
+                              {% else %}
+                                    <span class="text-white">Se Connecter</span>
+                              {% endif %}
+                        </a>
+                        <ul class="absolute w-48 left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-max list-none overflow-hidden rounded-lg bg-custom-violet text-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block" aria-labelledby="dropdownMenuButton2" data-te-dropdown-menu-ref>
+                              {# Si authentification #}
+                              {% if app.user %}
+                                    <li class="font-bold leading-tight text-white text-md px-4 mb-2">
+                                          Votre compte
+                                    </li>
+                                    <li>
+                                          <hr class="mx-4 mb-2 border-white">
+                                    </li>
+                                    <li>
+                                          <a href="{{ path('user.index') }}" class="block w-full whitespace-nowrap bg-transparent p-4 text-sm text-white active:text-neutral-800 active:no-underline disabled:pointer-events-none" data-te-dropdown-item-ref>
+                                                <span class="relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-500 py-2">Mon compte</span>
+                                          </a>
+                                    </li>
                                     {# Si ADMIN #}
                                     {% if 'ROLE_ADMIN' in app.user.roles %}
                                           <li>
-                                                <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('admin') }}">
-                                                Administration
+                                                <a href="{{ path('admin') }}" class="block w-full whitespace-nowrap bg-transparent p-4 text-sm text-white active:text-neutral-800 active:no-underline disabled:pointer-events-none" data-te-dropdown-item-ref>
+                                                      <span class="relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-500 py-2">Administration</span>
                                                 </a>
                                           </li>
                                     {% endif %}
-
-                                    {# Boutton de deconnexion #}
                                     <li>
-                                          <a class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100" href="{{ path('security.logout') }}">
-                                          Déconnexion
+                                          <hr class="mx-4 mt-2 border-white">
+                                    </li>
+                                    <li>
+                                          <a href="{{ path('security.logout') }}" class="block w-full whitespace-nowrap bg-transparent p-4 text-sm text-white active:text-neutral-800 active:no-underline disabled:pointer-events-none" data-te-dropdown-item-ref>
+                                                <span class="relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-500 py-2">Déconnexion</span>
                                           </a>
                                     </li>
-                              </ul>
-                        </div>
-                        
-                  {% else %}
-                        {# Boutton de connexion #}
-                        <a class="py-2 px-4 font-normal block w-full whitespace-nowrap" href="{{ path('security.login') }}">
-                              <i class="fa-solid fa-right-to-bracket fa-2x"></i>
-                        </a>
-                  {% endif %}
+                              {% else %}
+                              <li>
+                                    <a href="{{ path('security.login') }}" class="block w-full whitespace-nowrap bg-transparent p-4 text-sm text-white active:text-neutral-800 active:no-underline disabled:pointer-events-none" data-te-dropdown-item-ref>
+                                          <span class="relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-500 py-2">Connexion</span>
+                                    </a>
+                              </li>
+                              {% endif %}
+                        </ul>
+                  </div>
             </div>
-
-            {# Logo #}
-            <h1 class="mt-0 mb-2 text-5xl font-medium leading-tight">La Pizzeria</h1>
-
-            {# Boutton du panier #}
-            <a href="{{ path('cart') }}">
-                  <i class="fa-solid fa-shopping-cart fa-2x"></i>
-            </a>
+            <!-- Right elements -->
       </div>
 </nav>
+
+{# Message d'accueil et lien déconnexion #}
+{% if app.user %}
+      <div class="flex bg-gradient-to-r from-custom-dark-orange to-custom-light-orange">
+            <p class="text-white p-2 mx-5">Bonjour {{ app.user.username }} ! Vous êtes connecté. <a class="underline hover:text-custom-violet mx-2" href="{{ path('security.logout') }}">Se déconnecter</a></p>
+      </div>
+{% endif %}

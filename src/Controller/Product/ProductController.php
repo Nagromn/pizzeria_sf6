@@ -19,7 +19,7 @@ class ProductController extends AbstractController
             Request $request
       ): Response {
             return $this->render('pages/product/index.html.twig', [
-                  'products' => $productRepository->findAllPizza($request->query->getInt('page', 1))
+                  'products' => $productRepository->findAllProducts($request->query->getInt('page', 1))
             ]);
       }
 
