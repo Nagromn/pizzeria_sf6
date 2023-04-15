@@ -1,0 +1,9 @@
+<h1>Confirmation d'inscription</h1>
+
+<p>Bonjour, {{ user.username }}, et bienvenue sur le site de la Pizzeria SF6</p>
+<p>Veuillez confirmer votre adresse e-mail en cliquant sur le lien ci-dessous :</p>
+<p>Ce lien sera valable jusqu'au <strong>{{ lifeTimeToken }}</strong>, après cette date, il ne sera plus valable.</p>
+<p><a href="{{ absolute_url(path('security.confirmation', {token : token, id : user.id})) }}">Confirmer mon adresse e-mail</a></p>
+<strong>Ceci est un email automatique, merci de ne pas y répondre</strong>
+
+<p>A bientôt sur notre site !</p>

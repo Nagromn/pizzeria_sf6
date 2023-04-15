@@ -16,7 +16,7 @@ use App\Form\UserEmailType;
 class UserController extends AbstractController
 {
     /**
-     * Display user's profile data
+     * Permet d'afficher le profil de l'utilisateur
      *
      * @return Response
      */
@@ -32,7 +32,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * This controller allow us to edit user's personal data
+     * Permet d'éditer les informations de l'utilisateur
      *
      * @param User $user
      * @param Request $request
@@ -85,7 +85,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * This controller allow us to edit user's password
+     * Permet de modifier le mot de passe de l'utilisateur
      *
      * @param User $user
      * @param Request $request
@@ -141,7 +141,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * This controller allow us to edit user's email
+     * Permet la modification de l'email de l'utilisateur
      *
      * @param User $user
      * @param Request $request

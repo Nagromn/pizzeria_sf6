@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateInterval;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 50)]
     #[Assert\NotBlank()]
@@ -28,31 +28,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     #[Assert\Length(min: 2, max: 50)]
-    private string $username;
+    private ?string $username;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Email()]
     #[Assert\Length(min: 2, max: 180)]
-    private string $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'json')]
     #[Assert\NotNull()]
-    private array $roles = [];
+    private ?array $roles = [];
 
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank()]
-    private string $password = 'password';
+    private ?string $password = 'password';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private string $zipcode;
+    private ?string $zipcode;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private string $city;
+    private ?string $city;
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
@@ -62,10 +62,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private \DateTimeImmutable $updatedAt;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tokenRegistration = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $tokenRegistrationLifeTime = null;
+
+    #[ORM\Column]
+    #[Assert\NotNull()]
+    private ?bool $isVerified = false;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->isVerified = false;
+        $this->tokenRegistrationLifeTime = (new \DateTime('now'))->add(new DateInterval('P1D'));
     }
 
     public function __toString(): string
@@ -245,6 +257,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getTokenRegistration(): ?string
+    {
+        return $this->tokenRegistration;
+    }
+
+    public function setTokenRegistration(?string $tokenRegistration): self
+    {
+        $this->tokenRegistration = $tokenRegistration;
+
+        return $this;
+    }
+
+    public function getTokenRegistrationLifeTime(): ?\DateTimeInterface
+    {
+        return $this->tokenRegistrationLifeTime;
+    }
+
+    public function setTokenRegistrationLifeTime(\DateTimeInterface $tokenRegistrationLifeTime): self
+    {
+        $this->tokenRegistrationLifeTime = $tokenRegistrationLifeTime;
+
+        return $this;
+    }
+
+    public function isIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
