@@ -49,14 +49,4 @@ class CartController extends AbstractController
 
         return $this->redirectToRoute('cart');
     }
-
-    // Suppression du panier
-    // #[Route('/panier/delete', name: 'cart.delete', methods: ['GET'])]
-    // public function deleteCart(
-    //     CartService $cartService,
-    // ): Response {
-    //     $cartService->deleteAll();
-
-    //     return $this->redirectToRoute('cart');
-    // }
 }

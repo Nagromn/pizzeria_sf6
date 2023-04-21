@@ -85,62 +85,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * Permet de modifier le mot de passe de l'utilisateur
-     *
-     * @param User $user
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @param UserPasswordHasherInterface $hasher
-     * @return Response
-     */
-    #[Route('/utilisateur/edition-mot-de-passe/{id}', 'user.edit.password', methods: ['GET', 'POST'])]
-    public function editPassword(
-        User $user,
-        Request $request,
-        EntityManagerInterface $manager,
-        UserPasswordHasherInterface $hasher,
-    ): Response {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
-        }
-
-        if ($this->getUser() !== $user) {
-            return $this->redirectToRoute('product.index');
-        }
-
-        $form = $this->createForm(UserPasswordType::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
-                $user->setUpdatedAt(new \DateTimeImmutable());
-                $user->setPlainPassword(
-                    $form->getData()['newPassword']
-                );
-
-                $manager->persist($user);
-                $manager->flush();
-
-                $this->addFlash(
-                    'success',
-                    'Le mot de passe a été modifié avec succès.'
-                );
-
-                return $this->redirectToRoute('product.index');
-            } else {
-                $this->addFlash(
-                    'warning',
-                    'Le mot de passe est incorrect.'
-                );
-            }
-        }
-
-        return $this->render('pages/users/edit_password.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * Permet la modification de l'email de l'utilisateur
      *
      * @param User $user

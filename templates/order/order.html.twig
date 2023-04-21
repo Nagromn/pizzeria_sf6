@@ -40,7 +40,7 @@
 
             {# Mode de livraison #}
             <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-truck-fast"></i> Mode de livraison</h3>
-            <span>{{ form_row(form.delivery)|replace({'[-br]' : '</br>'})|raw }}</span>
+            <span>{{ form_row(form.transporter)|replace({'[-br]' : '</br>'})|raw }}</span>
         </div>
 
         {# Bloc du récapitulatif de la commande #}
@@ -87,7 +87,7 @@
                 <span class="font-bold text-2xl">{{ total|number_format(2, ',', '') }} €</span>
             </div>
             <div class="flex justify-between mt-5">
-                <a href="" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Procéder au paiement
+                <a href="{{ path('order.verify') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Validation de la commande
                 </a>
 
                 {# Fin du formulaire #}

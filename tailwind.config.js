@@ -5,7 +5,6 @@
 module.exports = {
   content: [
     "./src/**/*.{html,js}",
-    "./vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig",
     "./templates/**/*.html.twig",
     "./assets/**/*.js",
     "./node_modules/tw-elements/dist/js/**/*.js",

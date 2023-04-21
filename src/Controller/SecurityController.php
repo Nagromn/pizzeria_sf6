@@ -5,14 +5,16 @@ namespace App\Controller;
 use App\Entity\User;
 use Faker\Core\DateTime;
 use App\Form\RegistrationType;
+use App\Form\UserPasswordType;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
@@ -158,5 +160,119 @@ class SecurityController extends AbstractController
 
         // Redirection vers la page de connexion
         return $this->redirectToRoute('security.login');
+    }
+
+    /**
+     * Permet de réinitialiser le mot de passe d'un utilisateur
+     *
+     * @param EntityManagerInterface $manager
+     * @param MailerService $mailerService
+     * @param TokenGeneratorInterface $tokenGeneratorInterface
+     * @return Response
+     */
+    #[Route('/utilisateur/edition-mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+    public function editPassword(
+        User $user,
+        EntityManagerInterface $manager,
+        Service\MailerService $mailerService,
+        TokenGeneratorInterface $tokenGeneratorInterface
+    ): Response {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
+        if ($this->getUser() !== $user) {
+            return $this->redirectToRoute('product.index');
+        }
+
+        // Génération d'un token du mot de passe
+        $tokenPassword = $tokenGeneratorInterface->generateToken();
+
+        // On enregistre un token pour le mot de passe à l'utilisateur
+        $user->setTokenPassword($tokenPassword);
+
+        // Création du mail de confirmation de réinitialisation du mot de passe
+        $mailerService->send(
+            $user->getEmail(),
+            'Confirmation de réinitialisation de votre mot de passe',
+            'password_reset_confirmation.html.twig',
+            [
+                'user' => $user,
+                'token' => $tokenPassword,
+                'lifeTimeToken' => $user->getTokenPasswordLifeTime()->format('d/m/Y à H:i:s')
+            ]
+        );
+
+        // Message flash de confirmation de la réinitialisation du mot de passe
+        $this->addFlash('success', 'Votre demande a bien été prise en compte. Veuillez confirmer votre demande de réinitialisation de mot de passe en cliquant sur le lien que vous avez reçu par email.');
+
+        // Insertion dans la base de données
+        $manager->persist($user);
+        $manager->flush();
+
+        // Redirection vers la page de connexion
+        return $this->redirectToRoute('user.index');
+    }
+
+    /**
+     * Permet de confirmer la réinitialisation du mot de passe d'un utilisateur
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param UserPasswordHasherInterface $hasher
+     * @param string $token
+     * @return Response
+     */
+    #[Route('/mot-de-passe-oublie/confirmation/{token}', name: 'security.password_reset_confirmation', methods: ['GET', 'POST'])]
+    public function passwordResetConfirmation(
+        Request $request,
+        EntityManagerInterface $manager,
+        UserPasswordHasherInterface $hasher,
+        string $token,
+    ): Response {
+        $user = $manager->getRepository(User::class)->findOneBy(['tokenPassword' => $token]);
+
+        // Si le token est différent de celui attribué à l'utilisateur
+        if ($token !== $user->getTokenPassword()) {
+            // Retourne un message d'erreur si le token est différent de celui attribué à l'utilisateur
+            throw new AccessDeniedException("Le token de confirmation n'est pas valide.");
+        }
+
+        // Si le token est expiré
+        if (new DateTime('now') > $user->getTokenPasswordLifeTime()) {
+            // Retourne un message d'erreur si le token est expiré
+            throw new AccessDeniedException("Le token de confirmation a expiré. Veuillez vous réinscrire.");
+        }
+
+        $form = $this->createForm(UserPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
+                $user->setUpdatedAt(new \DateTimeImmutable());
+                $user->setPlainPassword(
+                    $form->getData()['newPassword']
+                );
+
+                $manager->persist($user);
+                $manager->flush();
+
+                $this->addFlash(
+                    'success',
+                    'Le mot de passe a été modifié avec succès.'
+                );
+
+                return $this->redirectToRoute('user.index');
+            } else {
+                $this->addFlash(
+                    'warning',
+                    'Le mot de passe est incorrect.'
+                );
+            }
+        }
+
+        return $this->render('pages/users/edit_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

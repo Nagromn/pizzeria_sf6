@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateInterval;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -22,7 +24,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 50)]
     private ?string $fullName;
 
@@ -42,7 +43,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'string')]
-    #[Assert\NotBlank()]
     private ?string $password = 'password';
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -68,9 +68,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $tokenRegistrationLifeTime = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tokenPassword = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $tokenPasswordLifeTime = null;
+
     #[ORM\Column]
     #[Assert\NotNull()]
     private ?bool $isVerified = false;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    private Collection $orders;
 
     public function __construct()
     {
@@ -78,6 +87,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new \DateTimeImmutable();
         $this->isVerified = false;
         $this->tokenRegistrationLifeTime = (new \DateTime('now'))->add(new DateInterval('P1D'));
+        $this->tokenPasswordLifeTime = (new \DateTime('now'))->add(new DateInterval('P1D'));
+        $this->orders = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -293,6 +304,76 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tokenPassword
+     */
+    public function getTokenPassword()
+    {
+        return $this->tokenPassword;
+    }
+
+    /**
+     * Set the value of tokenPassword
+     *
+     * @return  self
+     */
+    public function setTokenPassword($tokenPassword)
+    {
+        $this->tokenPassword = $tokenPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tokenPasswordLifeTime
+     */
+    public function getTokenPasswordLifeTime(): ?\DateTimeInterface
+    {
+        return $this->tokenPasswordLifeTime;
+    }
+
+    /**
+     * Set the value of tokenPasswordLifeTime
+     *
+     * @return  self
+     */
+    public function setTokenPasswordLifeTime(\DateTimeInterface $tokenPasswordLifeTime): self
+    {
+        $this->tokenPasswordLifeTime = $tokenPasswordLifeTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
 
         return $this;
     }
