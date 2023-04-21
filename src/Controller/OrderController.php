@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\OrderType;
-use App\Entity\Transporter;
 use App\Controller\Service\CartService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,15 +45,16 @@ class OrderController extends AbstractController
         $form = $this->createForm(OrderType::class, [
             'user' => $this->getUser(),
         ]);
-        
+
         $form->handleRequest($request);
 
         dd($form->getData());
 
-        if($form->isSubmitted() && $form->isValid()) {
-           $datetime = new \DateTime('now');
-           $transporter = $form->get('user')->getData();
-        //    $delivery = $form->get()
+        if ($form->isSubmitted() && $form->isValid()) {
+            //    $datetime = new \DateTime('now');
+            //    $transporter = $form->get('user')->getData();
+            //    $delivery = $form->get()
+            dd($form->getData());
         }
 
         return $this->render('order/recap.html.twig');
