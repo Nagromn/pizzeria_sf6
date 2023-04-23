@@ -33,18 +33,24 @@ class CartService
       // Récupération du total du panier
       public function getTotal(): array
       {
-            $cart = $this->getSession()->get('cart', []);
+            $cart = $this->getSession()->get('cart');
             $cartData = [];
-            foreach ($cart as $id => $quantity) {
-                  $cartData[] = [
-                        'product' => $this->entityManager->getRepository(Product::class)->find($id),
-                        'quantity' => $quantity
-                  ];
+            if ($cart) {
+                  foreach ($cart as $id => $quantity) {
+                        $product = $this->entityManager->getRepository(Product::class)->find($id);
+                        if (!$product) {
+                              $this->remove($id);
+                              continue;
+                        }
+                        $cartData[] = [
+                              'product' => $product,
+                              'quantity' => $quantity
+                        ];
+                  }
             }
-            
             return $cartData;
       }
-      
+
       // Décrémentation du produit du panier
       public function decrement(int $id): void
       {

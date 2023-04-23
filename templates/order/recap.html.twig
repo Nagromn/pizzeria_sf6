@@ -3,4 +3,139 @@
 {% block title %}Récapitulatif de commande{% endblock %}
 
 {% block body %}
+      {# Titre de la page Commande #}
+      <h2 class="font-medium leading-tight text-2xl text-custom-violet text-center mt-5 uppercase">Récapitulatif de votre commande</h2>
+
+      {# Breackcrumb #}
+      <nav class="flex justify-center w-full rounded-md mt-5 mb-2">
+            <ol class="list-reset flex">
+                  <li class="text-custom-violet">
+                        <a href="{{ path('index') }}">Accueil</a>
+                  </li>
+                  <li>
+                        <span class="text-custom-violet mx-5">></span>
+                  </li>
+                  <li class="text-custom-violet">
+                        <a href="{{ path('cart') }}">Panier</a>
+                  </li>
+                  <li>
+                        <span class="text-custom-violet mx-5">></span>
+                  </li>
+                  <li class="text-custom-violet">
+                        <a href="{{path('order') }}">Création de votre commande</a>
+                  </li>
+                  <li>
+                        <span class="text-custom-violet mx-5">></span>
+                  </li>
+                  <li class="text-custom-dark-orange underline">
+                        <a href="#">Validation de votre commande</a>
+                  </li>
+            </ol>
+      </nav>
+
+      {# Container de la page #}
+      <div class="flex flex-row flex-wrap justify-center">
+            <div class="flex flex-col flex-wrap p-6">
+                  <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet">Détails d'expéditions</h3>
+                  <div class="flex my-2">
+                        <input class="mx-3 mt-1" type="radio" name="transporter" checked>
+                        <label for="transporter">
+                              <span>{{ transporter.title }}</span>
+                              <span>{{ transporter.content }}</span>
+                              <span>{{ (transporter.price / 100)|number_format(2, ',', '') }} €</span>
+                        </label>
+                  </div>
+                  <div class="flex my-2">
+                        <input class="mx-3 mt-1" type="radio" name="delivery" checked>
+                        <label for="delivery">
+                              <span>{{ delivery|raw }}</span>
+                        </label>
+                  </div>
+            </div>
+            <div class="flex flex-col flex-wrap p-6">
+                  <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet">Récapitulatif de la commande</h3>
+
+                  {# On récupère la quantité de produit dans la variable recapCart #}
+                  {% set articleCount = 0 %}
+                  {% for item in recapCart %}
+                  {% set articleCount = articleCount + item.quantity %}
+                  {% endfor %}
+                  {# On affiche le nombre d'article(s) #}
+                  <span class="text-custom-violet text-end">{{ articleCount > 1 ? ' (' ~ articleCount ~ ' articles)' : ' (' ~ articleCount  ~ ' article)' }}</span>
+
+                  {# Séparateur #}
+                  <hr class="mt-5">
+
+                  {% set total = null %}
+                  {% for product in recapCart %}
+                  {# Total #}
+                        {% set total = total + (product.product.price * product.quantity) %}
+                        <div class="flex flex-row py-4">
+                              <div class="flex flex-col">
+                                    {# Image #}
+                                    <img src="{{ vich_uploader_asset(product.product, 'imageFile') }}" width="80" height="80" alt="{{ product.product.title }}">
+                              </div>
+                              <div class="flex flex-col flex-wrap px-6">
+                                    {# Nom du produit #}
+                                    <span>{{ product.product.title }}</span>
+                                    {# Quantité #}
+                                    <span>Quantité : <strong>x{{ product.quantity }}</strong></span>
+                                    {# Prix #}
+                                    <span>Prix : <strong>{{ product.product.price }} €</strong></span>
+                              </div>
+                        </div>
+                  {% endfor %}
+
+                  {# Bloc du total de la commande #}
+                  <div class="flex flex-col flex-wrap my-2">
+                        {# Sous Total #}
+                        <div class="flex justify-between my-2">
+                              <div>
+                                    <p>Sous-total :</p>
+                              </div>
+                              <div>
+                                    <strong class="text-end">{{ total|number_format(2, ',', '') }} €
+                                    </strong>
+                              </div>
+                        </div>
+                        {# Frais de livraison #}
+                        <div class="flex justify-between my-2">
+                              <div>
+                                    <p>Frais de port :</p>
+                              </div>
+                              <div>
+                                    <strong>
+                                          {{ (transporter.price / 100)|number_format(2, ',', '') }} €
+                                    </strong>
+                              </div>
+                        </div>
+                  </div>
+
+                   {# Séparateur #}
+                  <hr>
+
+                  {# Total final de la commande #}
+                  <div class="flex justify-between mt-5">
+                        <span class="font-bold text-2xl">Total :</span>
+                        <span class="font-bold text-2xl">
+                              {{ (total + (transporter.price / 100))|number_format(2, ',', '') }} €
+                        </span>
+                  </div>
+
+                  {% if method == 'stripe' %}
+                        <div class="flex justify-between my-5">
+                              {# Boutton paiement Stripe #}
+                              <form action="#" method="POST">
+                                    <button type="submit" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Payer avec Stripe
+                                    </button>
+                              </form>
+
+                              {# Annulation commande #}
+                              <a href="{{ path('order.delete') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
+                                    Annuler
+                              </a>
+                        </div>
+                  {% endif %}
+            </div>
+      </div>
 {% endblock %}

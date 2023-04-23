@@ -91,8 +91,11 @@
         {% else %}
 
         {# Si pas de produit affiche un panier vide #}
-        <div class="flex flex-row justify-evenly">
+        <div class="flex justify-center mt-5">
             <p class="text-gray-70 text-base my-5">Votre panier est vide 😢</p>
+        </div>
+        <div class="flex justify-center mb-5">
+            <a href="{{ path('index') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 my-5 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out"> Retourner à l'accueil</a>
         </div>
         {% endif %}
     </div>

@@ -25,7 +25,7 @@ class CartController extends AbstractController
     ): Response {
         $cartService->add($id);
 
-        return $this->redirectToRoute('cart');
+        return $this->redirectToRoute('menu');
     }
 
     // Décrementation d'un article du panier

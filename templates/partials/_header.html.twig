@@ -22,6 +22,13 @@
                   <div class="mx-5">
                         <a class="flex items-center" href="{{ path('cart') }}">
                               <img class="w-12" src="{{ asset('assets/img/icons/picto-05.png') }}" alt="Cart icon">
+                              {% set articleCount = 0 %}
+                                    {% for key, value in app.session.get('cart') %}
+                                          {% set articleCount = articleCount + value %}
+                                    {% endfor %}
+                              {% if articleCount > 1 %}
+                                    <span class="absolute -mt-6 ml-6 rounded-full bg-gradient-to-r from-custom-dark-orange to-custom-light-orange px-1.5 py-0 text-xs text-white">{{ articleCount }}</span>
+                              {% endif %}
                               <span class="text-white">Mon Panier</span>
                         </a>
                   </div>
