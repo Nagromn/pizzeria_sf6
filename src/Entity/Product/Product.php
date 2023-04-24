@@ -40,10 +40,10 @@ class Product
     #[Assert\NotBlank()]
     private string $description;
 
-    #[ORM\Column(type: 'decimal', scale: 2)]
+    #[ORM\Column]
     #[Assert\Positive]
     #[Assert\NotNull()]
-    private $price;
+    private float $price;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVending;
@@ -142,12 +142,12 @@ class Product
         return $this;
     }
 
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function setPrice($price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 

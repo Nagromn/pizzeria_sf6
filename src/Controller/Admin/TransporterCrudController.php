@@ -38,6 +38,7 @@ class TransporterCrudController extends AbstractCrudController
                 ->hideOnIndex(),
             MoneyField::new('price')
                 ->setLabel('Prix')
+                ->setStoredAsCents(true)
                 ->setCurrency('EUR'),
         ];
     }

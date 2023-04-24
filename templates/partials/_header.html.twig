@@ -26,7 +26,7 @@
                                     {% for key, value in app.session.get('cart') %}
                                           {% set articleCount = articleCount + value %}
                                     {% endfor %}
-                              {% if articleCount > 1 %}
+                              {% if articleCount > 0 %}
                                     <span class="absolute -mt-6 ml-6 rounded-full bg-gradient-to-r from-custom-dark-orange to-custom-light-orange px-1.5 py-0 text-xs text-white">{{ articleCount }}</span>
                               {% endif %}
                               <span class="text-white">Mon Panier</span>

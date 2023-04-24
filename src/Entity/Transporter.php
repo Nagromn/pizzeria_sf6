@@ -20,8 +20,8 @@ class Transporter
       #[ORM\Column(type: Types::TEXT)]
       private ?string $content = null;
 
-      #[ORM\Column(type: 'decimal', scale: 2)]
-      private $price;
+      #[ORM\Column]
+      private float $price;
 
       public function __toString(): string
       {
@@ -59,12 +59,12 @@ class Transporter
             return $this;
       }
 
-      public function getPrice()
+      public function getPrice(): float
       {
             return $this->price;
       }
 
-      public function setPrice($price): self
+      public function setPrice(float $price): self
       {
             $this->price = $price;
 

@@ -23,8 +23,8 @@ class OrderDetails
     #[ORM\Column(length: 255)]
     private ?string $product = null;
 
-    #[ORM\Column(type: 'decimal', scale: 2)]
-    private $price = null;
+    #[ORM\Column(type: 'integer')]
+    private float $price;
 
     #[ORM\Column(length: 255)]
     private ?string $totalOrder = null;
@@ -70,12 +70,12 @@ class OrderDetails
         return $this;
     }
 
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function setPrice($price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 

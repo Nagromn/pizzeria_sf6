@@ -28,7 +28,7 @@
                         <span class="text-custom-violet mx-5">></span>
                   </li>
                   <li class="text-custom-dark-orange underline">
-                        <a href="#">Validation de votre commande</a>
+                        <a href="#">Récapitulatif de votre commande</a>
                   </li>
             </ol>
       </nav>
@@ -38,17 +38,19 @@
             <div class="flex flex-col flex-wrap p-6">
                   <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet">Détails d'expéditions</h3>
                   <div class="flex my-2">
-                        <input class="mx-3 mt-1" type="radio" name="transporter" checked>
-                        <label for="transporter">
-                              <span>{{ transporter.title }}</span>
-                              <span>{{ transporter.content }}</span>
-                              <span>{{ (transporter.price / 100)|number_format(2, ',', '') }} €</span>
-                        </label>
-                  </div>
-                  <div class="flex my-2">
                         <input class="mx-3 mt-1" type="radio" name="delivery" checked>
                         <label for="delivery">
                               <span>{{ delivery|raw }}</span>
+                        </label>
+                  </div>
+                  <div class="flex my-2">
+                        <input class="mx-3 mt-1" type="radio" name="transporter" checked>
+                        <label for="transporter">
+                              <span>{{ transporter.title }}</span>
+                              </br>
+                              <span>{{ transporter.content }}</span>
+                              </br>
+                              <span>{{ (transporter.price / 100)|number_format(2, ',', '') }} €</span>
                         </label>
                   </div>
             </div>
@@ -81,7 +83,7 @@
                                     {# Quantité #}
                                     <span>Quantité : <strong>x{{ product.quantity }}</strong></span>
                                     {# Prix #}
-                                    <span>Prix : <strong>{{ product.product.price }} €</strong></span>
+                                    <span>Prix : <strong>{{ (product.product.price / 100)|number_format(2, ',', '') }} €</strong></span>
                               </div>
                         </div>
                   {% endfor %}
@@ -94,7 +96,7 @@
                                     <p>Sous-total :</p>
                               </div>
                               <div>
-                                    <strong class="text-end">{{ total|number_format(2, ',', '') }} €
+                                    <strong class="text-end">{{ (total / 100)|number_format(2, ',', '') }} €
                                     </strong>
                               </div>
                         </div>
@@ -118,21 +120,21 @@
                   <div class="flex justify-between mt-5">
                         <span class="font-bold text-2xl">Total :</span>
                         <span class="font-bold text-2xl">
-                              {{ (total + (transporter.price / 100))|number_format(2, ',', '') }} €
+                              {{ (total / 100 + (transporter.price / 100))|number_format(2, ',', '') }} €
                         </span>
                   </div>
 
                   {% if method == 'stripe' %}
                         <div class="flex justify-between my-5">
                               {# Boutton paiement Stripe #}
-                              <form action="#" method="POST">
-                                    <button type="submit" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Payer avec Stripe
+                              <form action="{{ path('payment.stripe', { reference: reference })}}" method="POST">
+                                    <button type="submit" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Payer avec Stripe | {{ (total / 100 + (transporter.price / 100))|number_format(2, ',', '') }} €
                                     </button>
                               </form>
 
                               {# Annulation commande #}
                               <a href="{{ path('order.delete') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
-                                    Annuler
+                                    <i class="fa-solid fa-trash-can"></i>
                               </a>
                         </div>
                   {% endif %}

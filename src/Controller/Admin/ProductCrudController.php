@@ -58,7 +58,7 @@ class ProductCrudController extends AbstractCrudController
                 ->setLabel('Catégorie'),
             MoneyField::new('price')
                 ->setLabel('Prix')
-                ->setStoredAsCents(false)
+                ->setStoredAsCents(true)
                 ->setCurrency('EUR'),
             BooleanField::new('isVending')
                 ->setLabel('En vente')
