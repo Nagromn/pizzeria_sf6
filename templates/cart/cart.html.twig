@@ -43,7 +43,7 @@
                         <div class="flex flex-col justify-center px-6">
                             <span>{{ item.product.title }}</span>
                             <span>Quantité : <strong>x{{ item.quantity }}</strong></span>
-                            <span>Prix UT : <strong>{{ item.product.price }}€</strong></span>
+                            <span>Prix UT : <strong>{{ (item.product.price / 100)|number_format(2, '.', '') }}€</strong></span>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     </div>
                     {# Prix en fonction de la quantité de produit #}
                     <div class="flex px-6">
-                        <span class="font-bold text-2xl">{{ (item.quantity * item.product.price)|number_format(2, '.', '') }}€</span>
+                        <span class="font-bold text-2xl">{{ (item.quantity * (item.product.price / 100))|number_format(2, '.', '') }}€</span>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
 
             {# Total du panier #}
             <div class="flex flex-row justify-center my-5">
-                <span class="font-bold text-2xl">Total : {{ total|number_format(2, ',', '') }}€</span>
+                <span class="font-bold text-2xl">Total : {{ (total / 100)|number_format(2, ',', '') }}€</span>
             </div>
 
             <div class="flex flex-row justify-center">

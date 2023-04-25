@@ -28,7 +28,8 @@ class UserFixtures extends Fixture
                   ->setEmail('admin@pizzeria.fr')
                   ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
                   ->setPlainPassword('password')
-                  ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTimeThisYear('Europe/Paris')));
+                  ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTimeThisYear('Europe/Paris')))
+                  ->isIsVerified(true);
 
             $users[] = $admin;
             $manager->persist($admin);

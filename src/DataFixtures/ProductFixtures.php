@@ -21,7 +21,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
                   $product->setTitle($faker->words(4, true))
                         ->setCategory($faker->randomElement($category))
                         ->setDescription($faker->realText(1800))
-                        ->setPrice(12.99)
+                        ->setPrice((12.99 * 100))
                         ->setIsVending(mt_rand(0, 1))
                         ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')))
                         ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')));
