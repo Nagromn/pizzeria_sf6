@@ -35,7 +35,7 @@
             {{ form_start(form, { action:path('order.verify')}) }}
 
             {# Choix de la livraison #}
-            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-location-dot"></i> Choix de la livraison</h3>
+            <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-location-dot"></i> Adresse de livraison</h3>
             <span>{{ form_row(form.address)|replace({'[-br]' : '</br>'})|raw }}</span>
             {# Mode de livraison #}
 
