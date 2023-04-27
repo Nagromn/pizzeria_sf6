@@ -4,6 +4,8 @@
   - Installation de symfony cli.
   - Installation de composer.
   - Un compte Mailtrap pour récupérer les emails (important pour l'inscription sur le site du projet), et inscrire le MAILER_DSN dans le .env.
+## Optionnel :
+  - Un compte Stripe avec une clé API pour la manipulation du paiement. Ajouter votre clé secrète dans le .env.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Après avoir cloner le projet :
