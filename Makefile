@@ -1,7 +1,7 @@
 # Variables
 DOCKER = docker
 DOCKER_COMPOSE = docker-compose
-EXEC = $(DOCKER) exec -w /var/www/project www_pizzeria
+EXEC = $(DOCKER) exec -w /var/www/pizzeria_sf6 www_pizzeria
 PHP = $(EXEC) php
 COMPOSER = $(EXEC) composer
 NPM = $(EXEC) npm
