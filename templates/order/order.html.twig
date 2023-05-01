@@ -27,15 +27,16 @@
         </ol>
     </nav>
 
-
     {# Container de la page #}
     <div class="flex flex-row flex-wrap justify-center">
         <div class="flex flex-col flex-wrap p-6">
+
             {# Début du formulaire #}
             {{ form_start(form, { action:path('order.verify')}) }}
 
             {# Choix de la livraison #}
             <h3 class="font-medium leading-tight text-2xl mt-0 mb-2 text-custom-violet"><i class="fa-solid fa-location-dot"></i> Adresse de livraison</h3>
+
             <span>{{ form_row(form.address)|replace({'[-br]' : '</br>'})|raw }}</span>
             {# Mode de livraison #}
 
@@ -52,6 +53,7 @@
             {% for item in recapCart %}
                 {% set articleCount = articleCount + item.quantity %}
             {% endfor %}
+
             {# On affiche le nombre d'article(s) #}
             <span class="text-custom-violet text-end">{{ articleCount > 1 ? ' (' ~ articleCount ~ ' articles)' : ' (' ~ articleCount  ~ ' article)' }}</span>
 
@@ -60,21 +62,27 @@
 
             {% set total = null %}
             {% for product in recapCart %}
+
             {# Total #}
             {% set total = total + product.product.price * product.quantity %}
+
             <div class="flex flex-row py-4">
+                {# Image du produit #}
                 <div class="flex flex-col">
-                    {# Image #}
                     <img src="{{ vich_uploader_asset(product.product, 'imageFile') }}" width="80" height="80" alt="{{ product.product.title }}">
                 </div>
+
                 <div class="flex flex-col flex-wrap px-6">
                     {# Nom du produit #}
                     <span>{{ product.product.title }}</span>
+
                     {# Quantité #}
                     <span>Quantité : <strong>x{{ product.quantity }}</strong></span>
+
                     {# Prix #}
                     <span>Prix : <strong>{{ (product.product.price / 100)|number_format(2, ',', '') }} €</strong></span>
                 </div>
+
             </div>
             {% endfor %}
 
@@ -86,13 +94,15 @@
                 <span class="font-bold text-2xl">Total :</span>
                 <span class="font-bold text-2xl">{{ (total / 100)|number_format(2, ',', '') }} €</span>
             </div>
+
             <div class="flex justify-between mt-5">
-                <button type="submit" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Validation de la commande
-                </button>
+                {# Bouton de validation de la commande #}
+                {{ form_widget(form.submit) }}
 
                 {# Fin du formulaire #}
                 {{ form_end(form) }}
 
+                {# Bouton de suppression de la commande #}
                 <a href="{{ path('order.delete') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>

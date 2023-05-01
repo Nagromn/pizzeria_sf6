@@ -18,6 +18,12 @@ class CartService
             $this->entityManager = $entityManager;
       }
 
+      // Récupération de la session
+      private function getSession(): ?SessionInterface
+      {
+            return $this->requestStack->getSession();
+      }
+
       // Ajout au panier
       public function add(int $id): void
       {
@@ -51,6 +57,17 @@ class CartService
             return $cartData;
       }
 
+      // Incrémentation du produit du panier
+      public function increment(int $id): void
+      {
+            $session = $this->getSession();
+            $cart = $session->get('cart', []);
+            if (array_key_exists($id, $cart)) {
+                  $cart[$id]++;
+                  $session->set('cart', $cart);
+            }
+      }
+
       // Décrémentation du produit du panier
       public function decrement(int $id): void
       {
@@ -78,14 +95,8 @@ class CartService
       }
 
       // Suppression du panier
-      public function deleteAll()
+      public function removeCart(): array
       {
             return $this->getSession()->remove('cart');
-      }
-
-      // Récupération de la session
-      private function getSession(): ?SessionInterface
-      {
-            return $this->requestStack->getSession();
       }
 }

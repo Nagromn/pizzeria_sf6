@@ -120,7 +120,7 @@ class OrderController extends AbstractController
     public function deleteOrder(
         CartService $cartService,
     ): Response {
-        $cartService->deleteAll();
+        $cartService->removeCart();
 
         return $this->redirectToRoute('index');
     }

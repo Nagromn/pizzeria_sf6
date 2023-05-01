@@ -3,13 +3,12 @@
 {% block title %}Mon Panier{% endblock %}
 
 {% block body %}
-    {# {{ dump(cart) }} #}
-
     {# Panier #}
     <h2 class="font-medium leading-tight text-2xl text-custom-violet text-center mt-5 uppercase">Votre panier</h2> 
 
     {# Si le cart comprend un article #}
     {% if cart|length > 0 %}
+
     {# Breackcrumb #}
     <nav class="flex justify-center w-full rounded-md mt-5">
         <ol class="list-reset flex">
@@ -27,50 +26,66 @@
 
     {# Initilisation de la variable total #}
     {% set total = null %}
+
     {# Container de la page #}
     <div class="flex justify-center my-5">
         <div class="flex flex-col" style="max-width: 620px;">
+
+            {# Séparateur #}
             <hr>
+
             {% for item in cart %}
             <div class="rounded-lg shadow-lg bg-white my-5">
                 <div class="flex items-center mt-5">
-                {# Calcul total du panier #}
-                {% set total = total + (item.product.price * item.quantity) %}
-                <div class="flex justify-between py-4 px-6">
-                    {# Image du produit #}
-                    <img class="rounded-full" src="{{ vich_uploader_asset(item.product, 'imageFile') }}" width="150" height="100" alt="{{ item.product.title }}">
+
+                    {# Calcul total du panier #}
+                    {% set total = total + (item.product.price * item.quantity) %}
+
+                    <div class="flex justify-between py-4 px-6">
+
+                        {# Image du produit #}
+                        <img class="rounded-full" src="{{ vich_uploader_asset(item.product, 'imageFile') }}" width="150" height="100" alt="{{ item.product.title }}">
+
                         {# Informations sur le produit #}
                         <div class="flex flex-col justify-center px-6">
                             <span>{{ item.product.title }}</span>
                             <span>Quantité : <strong>x{{ item.quantity }}</strong></span>
-                            <span>Prix UT : <strong>{{ (item.product.price / 100)|number_format(2, '.', '') }}€</strong></span>
+                            <span>Prix UT : <strong>{{ (item.product.price / 100)|number_format(2, ',', '') }}€</strong></span>
                         </div>
                     </div>
                 </div>
+
                 {# Prix et quantité du produit#}
                 <div class="flex flex-wrap items-center justify-between py-4 px-6">
-                    {# Incrémentation du panier #}
                     <div class="flex justify-between">
+
                         <div>
-                            <a href="{{ path('cart.add', {'id': item.product.id}) }}">
+                            {# Incrémentation du panier #}
+                            <a href="{{ path('cart.increment', {'id': item.product.id}) }}">
                                 <button type="button" style="width: 40px; height: 40px;" class="inline-block px-4 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">+</button>
                             </a>
+
                             {# Quantité du produit #}
                             <input value="{{ item.quantity }}" style="width: 61px; height: 35px;" class="text-center" readonly/>
+
                             {# Décrémentation du panier #}
                             <a href="{{ path('cart.decrement', {'id': item.product.id}) }}">
                                 <button type="button" style="width: 40px; height: 40px;" class="inline-block px-4 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">-</button>
                             </a>
+
                         </div>
                     </div>
-                    {# Prix en fonction de la quantité de produit #}
+
+                    {# Prix ajusté en fonction de la quantité de produit #}
                     <div class="flex px-6">
-                        <span class="font-bold text-2xl">{{ (item.quantity * (item.product.price / 100))|number_format(2, '.', '') }}€</span>
+                        <span class="font-bold text-2xl">{{ (item.quantity * (item.product.price / 100))|number_format(2, ',', '') }}€</span>
                     </div>
+
                 </div>
             </div>
             {% endfor %}
-            
+
+            {# Séparateur #}
             <hr class="mt-5">
 
             {# Total du panier #}
@@ -78,15 +93,20 @@
                 <span class="font-bold text-2xl">Total : {{ (total / 100)|number_format(2, ',', '') }}€</span>
             </div>
 
-            <div class="flex flex-row justify-center">
             {# Form de validation du panier #}
-                <form action="{{ path('order') }}" method='POST'>
-                    <div class="flex justify-center">
-                        {# Bouton de validation du panier #}
-                        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Valider la commande</button>
-                    </div>
-                <form>
-            </div>
+            <form action="{{ path('order') }}" method='POST'>
+                <div class="flex justify-between mt-5">
+
+                    {# Bouton de validation du panier #}
+                    <button class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out" type="submit">Valider la commande</button>
+
+                    {# Bouton de suppression de la commande #}
+                    <a href="{{ path('order.delete') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+
+                </div>
+            </form>
         </div>
         {% else %}
 
@@ -94,9 +114,12 @@
         <div class="flex justify-center mt-5">
             <p class="text-gray-70 text-base my-5">Votre panier est vide 😢</p>
         </div>
+
+        {# Bouton de retour à l'accueil #}
         <div class="flex justify-center mb-5">
             <a href="{{ path('index') }}" class="inline-block border-2 border-custom-violet rounded-full py-3 px-6 my-5 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out"> Retourner à l'accueil</a>
         </div>
+
         {% endif %}
     </div>
 {% endblock %}

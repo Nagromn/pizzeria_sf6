@@ -2,10 +2,11 @@
 
 namespace App\Controller\Product;
 
+use App\Form\MarkType;
 use App\Form\ProductType;
 use App\Entity\Product\Product;
-use App\Repository\Product\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\Product\ProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,10 +55,21 @@ class ProductController extends AbstractController
       }
 
       #[Route('produit/{slug}', name: 'product.show', methods: ['GET'])]
-      public function show(Product $product): Response
+      public function show(Product $product, Request $request): Response
       {
-            return $this->render('pages/product/product.html.twig', [
-                  'product' => $product
+            $form = $this->createForm(MarkType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                  dd($form->getData());
+
+                  // $manager->persist($mark);
+                  // $manager->flush();
+            }
+
+            return $this->render('pages/product/show.html.twig', [
+                  'product' => $product,
+                  'form' => $form->createView()
             ]);
       }
 
@@ -104,11 +116,11 @@ class ProductController extends AbstractController
       }
 
       // On récupère les derniers id des produits enregistrés
-      #[Route('/', name: 'index', methods: ['GET'])]
-      public function findLastId(ProductRepository $productRepository, Request $request): Response
-      {
-            return $this->render('pages/product/index.html.twig', [
-                  'products' => $productRepository->findLastId($request->query->getInt('page', 1))
-            ]);
-      }
+      // #[Route('/', name: 'index', methods: ['GET'])]
+      // public function findLastId(ProductRepository $productRepository, Request $request): Response
+      // {
+      //       return $this->render('pages/product/index.html.twig', [
+      //             'products' => $productRepository->findLastId($request->query->getInt('page', 1))
+      //       ]);
+      // }
 }

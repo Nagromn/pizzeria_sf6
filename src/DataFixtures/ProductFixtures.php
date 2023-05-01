@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Mark;
+use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Product\Product;
 use Doctrine\Persistence\ObjectManager;
@@ -15,7 +17,10 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
       {
             $faker = Factory::create('fr_FR');
             $category = $manager->getRepository(Category::class)->findAll();
+            $users = $manager->getRepository(User::class)->findAll();
+            $products = [];
 
+            // Product
             for ($i = 0; $i < 20; $i++) {
                   $product = new Product();
                   $product->setTitle($faker->words(4, true))
@@ -27,7 +32,21 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
                         ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')));
 
                   // dd($product);
+                  $products[] = $product;
                   $manager->persist($product);
+            }
+
+            // Mark
+            foreach ($products as $product) {
+                  for ($i = 0; $i < mt_rand(0, 4); $i++) {
+                        $mark = new Mark();
+                        $mark->setMark(mt_rand(1, 5))
+                              ->setUser($users[mt_rand(0, count($users) - 1)])
+                              ->setProduct($product)
+                              ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')));
+
+                        $manager->persist($mark);
+                  }
             }
 
             $manager->flush();

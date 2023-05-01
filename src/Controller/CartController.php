@@ -28,6 +28,17 @@ class CartController extends AbstractController
         return $this->redirectToRoute('menu');
     }
 
+    // Incrémentation d'un article du panier
+    #[Route('/panier/increment/{id<\d+>}', name: 'cart.increment', methods: ['GET'])]
+    public function increment(
+        CartService $cartService,
+        int $id
+    ): Response {
+        $cartService->increment($id);
+
+        return $this->redirectToRoute('cart');
+    }
+
     // Décrementation d'un article du panier
     #[Route('/panier/decrement/{id<\d+>}', name: 'cart.decrement', methods: ['GET'])]
     public function decrement(
@@ -39,14 +50,14 @@ class CartController extends AbstractController
         return $this->redirectToRoute('cart');
     }
 
-    // Suppression d'un article du panier
-    #[Route('/panier/remove/{id<\d+>}', name: 'cart.remove', methods: ['GET'])]
-    public function removeFromCart(
-        CartService $cartService,
-        int $id
-    ): Response {
-        $cartService->remove($id);
+    // Suppression de tout le panier
+    #[Route('/panier/remove', name: 'cart.remove', methods: ['GET'])]
+    public function removeCart(CartService $cartService): Response
+    {
+        $cartService->removeCart();
 
         return $this->redirectToRoute('cart');
     }
+    
+
 }
