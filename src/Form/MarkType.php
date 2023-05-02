@@ -14,7 +14,7 @@ class MarkType extends AbstractType
       public function buildForm(FormBuilderInterface $builder, array $options): void
       {
             $builder
-                  ->add('stars', ChoiceType::class, [
+                  ->add('mark', ChoiceType::class, [
                         'label' => false,
                         'choices' => [
                               '★★★★★' => 5,

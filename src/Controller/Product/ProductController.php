@@ -2,9 +2,11 @@
 
 namespace App\Controller\Product;
 
+use App\Entity\Mark;
 use App\Form\MarkType;
 use App\Form\ProductType;
 use App\Entity\Product\Product;
+use App\Repository\MarkRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Product\ProductRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,17 +56,44 @@ class ProductController extends AbstractController
             ]);
       }
 
-      #[Route('produit/{slug}', name: 'product.show', methods: ['GET'])]
-      public function show(Product $product, Request $request): Response
-      {
-            $form = $this->createForm(MarkType::class);
+      #[Route('produit/{slug}', name: 'product.show', methods: ['GET', 'POST'])]
+      public function show(
+            Product $product,
+            Request $request,
+            MarkRepository $markRepository,
+            EntityManagerInterface $manager
+      ): Response {
+            $mark = new Mark();
+            $form = $this->createForm(MarkType::class, $mark);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                  dd($form->getData());
+                  $mark->setUser($this->getUser())
+                        ->setProduct($product);
 
-                  // $manager->persist($mark);
-                  // $manager->flush();
+                  $existingMark = $markRepository->findOneBy([
+                        'user' => $this->getUser(),
+                        'product' => $product
+                  ]);
+
+                  if (!$existingMark) {
+                        $manager->persist($mark);
+                  } else {
+                        $existingMark->setMark(
+                              $form->getData()->getMark()
+                        );
+                  }
+
+                  $manager->flush();
+
+                  $this->addFlash(
+                        'success',
+                        'Votre note a été prise en compte.'
+                  );
+
+                  return $this->redirectToRoute('product.show', [
+                        'slug' => $product->getSlug()
+                  ]);
             }
 
             return $this->render('pages/product/show.html.twig', [

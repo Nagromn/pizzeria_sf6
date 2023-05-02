@@ -3,16 +3,20 @@
 namespace App\Controller;
 
 use Stripe\Stripe;
+use App\Entity\User;
 use App\Entity\Order;
+use App\Entity\OrderDetails;
 use Stripe\Checkout\Session;
 use App\Entity\Product\Product;
 use App\Controller\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PaymentController extends AbstractController
 {
@@ -64,10 +68,8 @@ class PaymentController extends AbstractController
                   'quantity' => 1,
             ];
 
-            // dd($productStripe);
-
             Stripe::setApiKey($_ENV['STRIPE_SECRET']);
-            
+
             $checkout_session = Session::create([
                   'customer_email' => $this->getUser()->getEmail(),
                   'payment_method_types' => ['card'],
@@ -99,8 +101,38 @@ class PaymentController extends AbstractController
       }
 
       #[Route('/commande/success/{reference}', name: 'payment.success', methods: ['GET', 'POST'])]
-      public function stripeSuccess($reference, CartService $cartService): Response
-      {
+      public function stripeSuccess(
+            $reference,
+            CartService $cartService,
+            Service\MailerService $mailerService
+      ): Response {
+            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $this->getUser()->getEmail()]);
+            $order = $this->em->getRepository(Order::class)->findOneBy(['reference' => $reference]);
+            $orderDetails = $this->em->getRepository(OrderDetails::class)->findOneBy(['orderProduct' => $order->getId()]);
+            $createdAt = $order->getCreatedAt();
+            $product = $this->em->getRepository(Product::class)->findOneBy(['title' => $orderDetails->getProduct()]);
+            $transporter = $this->em->getRepository(Product::class)->findOneBy(['title' => $order->getTransporterName()]);
+
+            // Envoie un mail de confirmation de commande
+            $mailerService->send(
+                  $user->getEmail(),
+                  'Votre commande a bien été validée',
+                  'order_comfirmation.html.twig',
+                  [
+                        'order' => $order,
+                        'reference' => $reference,
+                        'orderDetails' => $orderDetails,
+                        'createdAt' => $createdAt->format('d/m/Y à H:i:s'),
+                        'product' => $product,
+                        'transporter' => $transporter,
+                  ]
+            );
+
+            // Permet de valider le paiement de la commande sur dans la DB (booléen)
+            $order->setIsPaid(true);
+            $this->em->flush();
+
+            // Redirige sur une page de confirmation de commande avec récapitulatif de commande
             return $this->render('order/success.html.twig');
       }
 

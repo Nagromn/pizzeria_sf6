@@ -35,11 +35,11 @@ class Mark
     private ?Product $product = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
-        $this->createdAt;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -83,12 +83,12 @@ class Mark
         return $this;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
