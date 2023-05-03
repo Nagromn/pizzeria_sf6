@@ -63,34 +63,90 @@ class ProductController extends AbstractController
             MarkRepository $markRepository,
             EntityManagerInterface $manager
       ): Response {
+            // Création d'une nouvelle instance de la classe Mark pour stocker la note de l'utilisateur
             $mark = new Mark();
+
+            // Création d'un formulaire pour permettre à l'utilisateur de saisir sa note
             $form = $this->createForm(MarkType::class, $mark);
+
+            // Traitement du formulaire s'il a été soumis
             $form->handleRequest($request);
 
+            // Récupération de l'utilisateur connecté
+            $user = $this->getUser();
+
+            // Récupération de toutes les commandes de l'utilisateur
+            $orders = $user->getOrders();
+
+            // Parcours de toutes les commandes de l'utilisateur
+            foreach ($orders as $order) {
+                  // Récupération des détails de la commande
+                  $orderDetails = $order->getOrderDetails();
+                  $isProductOrdered = false;
+                  foreach ($orderDetails as $orderDetail) {
+                        // Vérification si le produit de la commande correspond au produit souhaité
+
+                        if ($orderDetail->getProduct() === $product->getTitle() && $order->isIsPaid() === true) {
+                              // L'utilisateur a déjà commandé ce produit et la commande est payée
+                              // Vous pouvez faire ce que vous voulez ici (par exemple, l'empêcher de noter à nouveau)
+                              // Mettre la variable $isProductOrdered à true
+                              $isProductOrdered = true;
+
+                              // Sortir des deux boucles
+                              break 2;
+                        }
+                  }
+            }
+
+            // Vérification si le formulaire a été soumis et est valide
             if ($form->isSubmitted() && $form->isValid()) {
+                  // Attribution de l'utilisateur et du produit à l'objet Mark
                   $mark->setUser($this->getUser())
                         ->setProduct($product);
 
+                  // Recherche d'une note existante pour l'utilisateur et le produit actuel
                   $existingMark = $markRepository->findOneBy([
                         'user' => $this->getUser(),
                         'product' => $product
                   ]);
 
+                  // Vérification si l'utilisateur a acheté le produit actuel
+                  if (!$isProductOrdered) {
+                        // L'utilisateur n'a pas encore commandé ce produit ou la commande n'est pas payée
+                        // Empêcher l'utilisateur de noter le produit
+                        // Afficher un message d'erreur si le produit n'a jamais été acheté
+                        $this->addFlash(
+                              'error',
+                              'Vous devez acheter ce produit avant de pouvoir le noter.'
+                        );
+
+                        // Redirection vers la page du produit
+                        return $this->redirectToRoute('product.show', [
+                              'slug' => $product->getSlug()
+                        ]);
+                  }
+
+                  // Vérification si l'utilisateur a déjà noté le produit
                   if (!$existingMark) {
                         $manager->persist($mark);
+
+                        // La note de l'utilisateur existe déjà, donc on la met à jour
                   } else {
                         $existingMark->setMark(
                               $form->getData()->getMark()
                         );
                   }
 
+                  // Enregistrement de la note dans la base de données
                   $manager->flush();
 
+                  // Afficher un message de succès si la note a été enregistrée
                   $this->addFlash(
                         'success',
                         'Votre note a été prise en compte.'
                   );
 
+                  // Redirection vers la page du produit
                   return $this->redirectToRoute('product.show', [
                         'slug' => $product->getSlug()
                   ]);

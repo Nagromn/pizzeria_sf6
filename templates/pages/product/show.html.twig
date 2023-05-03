@@ -11,6 +11,11 @@
                   {{ message }}
             </div>
       {% endfor %}
+      {% for message in app.flashes('error') %}
+            <div class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700" role="alert">
+                  {{ message }}
+            </div>
+      {% endfor %}
 
       {# Titre de la page #}
       <h2 class="font-medium leading-tight text-3xl text-custom-violet text-center mt-5">{{ product.title }}</h2>
@@ -59,18 +64,24 @@
                               {% endfor %}
                         </div>
 
-                        {# Form de notation du produit #}
-                        {{ form_start(form) }}
-                              <div class="flex justify-center">
-                                    <div class="mr-2">
-                                          {{ form_row(form.mark) }}
+                        {# {% if is_granted('ROLE_USER') and product.isIsPaid(app.user) %} #}
+                              {# Form de notation du produit #}
+                              {{ form_start(form) }}
+                                    <div class="flex justify-center">
+                                          <div class="mr-2">
+                                                {{ form_row(form.mark) }}
+                                          </div>
+                                          <div class="ml-2">
+                                                {{ form_row(form.submit) }}
+                                          </div>
                                     </div>
-                                    <div class="ml-2">
-                                          {{ form_row(form.submit) }}
-                                    </div>
-                              </div>
-                        {# Fin de formulaire #}
-                        {{ form_end(form) }}
+                              {# Fin de formulaire #}
+                              {{ form_end(form) }}
+                        {# {% endif %} #}
+
+
+
+                        
 
                         {# Prix du produit #}
                         <div class="flex justify-center mt-5">
