@@ -4,53 +4,52 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container mx-auto my-10">
-		<div class="flex justify-center">
-			<div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+      <div class="container mx-auto my-10">
+            <div class="flex justify-center">
+                  <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+                        {# Affiche les messages flash success #}
+                        {% for message in app.flashes('success') %}
+                              <div class="bg-green-100 rounded-lg py-5 px-6 mb-4 text-base text-green-700" role="alert">
+                                    {{ message }}
+                              </div>
+                        {% endfor %}
 
-			{# Affiche les messages flash success #}
-			{% for message in app.flashes('success') %}
-				<div class="bg-green-100 rounded-lg py-5 px-6 mb-4 text-base text-green-700" role="alert">
-					{{ message }}
-				</div>
-			{% endfor %}
+                        {# Affiche les messages flash error #}
+                        {% if error %}
+                              <div class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700" role="alert">
+                                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                              </div>
+                        {% endif %}
+                        
+                        {# Formulaire de connexion #}
+                        <form action="{{ path('security.login') }}" method='POST'>
 
-			{# Affiche les messages flash error #}
-			{% if error %}
-				<div class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700" role="alert">
-					{{ error.messageKey|trans(error.messageData, 'security') }}
-				</div>
-			{% endif %}
-				
-				{# Formulaire de connexion #}
-				<form action="{{ path('security.login') }}" method='POST'>
+                              <div class="form-group mb-6">
+                                    {# Input email #}
+                                    <label for="email" class="text-custom-violet">Email</label>
+                                    <input type="email" class="form-control block w-full text-base font-normal mb-6 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="username" name="_username" placeholder="exemple@pizzeria.fr" value="{{ last_username }}">
+                              </div>
 
-					<div class="form-group mb-6">
-						{# Input email #}
-						<label for="email" class="text-custom-violet">Email</label>
-						<input type="email" class="form-control block w-full text-base font-normal mb-6 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="username" name="_username" placeholder="exemple@pizzeria.fr" value="{{ last_username }}">
-					</div>
+                              <div class="form-group mb-6">
+                                    {# Input password #}
+                                    <label for="password" class="text-custom-violet">Mot de passe</label>
+                                    <input type="password" class="form-control block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="password" name="_password" placeholder="********">
+                              </div>
 
-					<div class="form-group mb-6">
-						{# Input password #}
-						<label for="password" class="text-custom-violet">Mot de passe</label>
-						<input type="password" class="form-control block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="password" name="_password" placeholder="********">
-					</div>
+                              {# Boutton de connexion #}
+                              <div class="w-full rounded-full px-4 py-3 border-2 border-custom-violet bg-custom-violet text-white text-center  font-bold leading-tight uppercase shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
+                                    <button type="submit">Connexion</button>
+                              </div>
+                        </form>
+                  </div>
+            </div>
 
-					{# Boutton de connexion #}
-					<div class="w-full rounded-full px-4 py-3 border-2 border-custom-violet bg-custom-violet text-white text-center  font-bold leading-tight uppercase shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">
-						<button type="submit">Connexion</button>
-					</div>
-				</form>
-			</div>
-		</div>
-
-		{# Pour rediriger l'utilisateur sur la page d'inscription si pas de compte utilisateur existant #}
-		<div class="flex flex-row justify-center my-10 text-custom-violet">
-			<p>Pas encore inscrit ?
-				{# Boutton de redirection sur la page d'inscription #}
-				<a href="{{ path('security.registration') }}" class="inline-block border-2 border-custom-violet rounded-full mx-2 py-2 px-3 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Inscrivez-vous ici !</a>
-			</p>
-		</div>
-	</div>
+            {# Pour rediriger l'utilisateur sur la page d'inscription si pas de compte utilisateur existant #}
+            <div class="flex flex-row justify-center my-10 text-custom-violet">
+                  <p>Pas encore inscrit ?
+                        {# Boutton de redirection sur la page d'inscription #}
+                        <a href="{{ path('security.registration') }}" class="inline-block border-2 border-custom-violet rounded-full mx-2 py-2 px-3 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Inscrivez-vous ici !</a>
+                  </p>
+            </div>
+      </div>
 {% endblock %}
