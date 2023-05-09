@@ -29,24 +29,16 @@
                                     <p class="text-custom-violet leading-tight text-lg mb-5">Nom / Prénom :</p>
 
                                     {# Pseudo #}
-                                    <p class="text-custom-violet leading-tight text-lg mb-5">Pseudo :
-                                          
-                                    </p>
+                                    <p class="text-custom-violet leading-tight text-lg mb-5">Pseudo :</p>
 
                                     {# Adresse #}
-                                    <p class="text-custom-violet leading-tight text-lg mb-5">Adresse :
-                                          
-                                    </p>
+                                    <p class="text-custom-violet leading-tight text-lg mb-5">Adresse :</p>
 
                                     {# Code Postal #}
-                                    <p class="text-custom-violet leading-tight text-lg mb-5">Code Postal :
-                                          
-                                    </p>
+                                    <p class="text-custom-violet leading-tight text-lg mb-5">Code Postal :</p>
 
                                     {# Ville #}
-                                    <p class="text-custom-violet leading-tight text-lg mb-5">Ville :
-                                          
-                                    </p>
+                                    <p class="text-custom-violet leading-tight text-lg mb-5">Ville :</p>
                               </div>
 
                               {# Deuxième colonne #}
@@ -79,6 +71,7 @@
                                     {% endif %}
                               </div>
                         </div>
+
                         {# Bouton de modification des données personnelles #}
                         <a href="{{ path('user.edit', { id: app.user.id }) }}">
                               <button type="button" class="w-full inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Modifier vos informations</button>
@@ -95,6 +88,7 @@
                                     <p class="text-custom-violet leading-tight text-lg mb-5">{{ app.user.email }}</p>
                               </div>
                         </div>
+
                         {# Bouton de modification de l'adresse email #}
                         <a href="{{ path('user.edit.email', { id: app.user.id }) }}">
                               <button type="button" class="w-full inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Modifier l'adresse email</button>
@@ -110,6 +104,7 @@
                                     <p class="text-custom-violet leading-tight text-lg mb-5">**********</p>
                               </div>
                         </div>
+
                         {# Bouton de modification du mot de passe #}
                         <a href="{{ path('user.edit.password', { id: app.user.id }) }}">
                               <button type="button" class="w-full inline-block border-2 border-custom-violet rounded-full py-3 px-6 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">Modifier le mot de passe</button>
@@ -127,39 +122,47 @@
                                                       <table class="min-w-full text-left text-sm font-light">
                                                             <thead class="border-b font-medium dark:border-neutral-500">
                                                                   <tr>
-                                                                        <th scope="col" class="px-6 py-4">#</th>
-                                                                        <th scope="col" class="px-6 py-4">First</th>
-                                                                        <th scope="col" class="px-6 py-4">Last</th>
-                                                                        <th scope="col" class="px-6 py-4">Handle</th>
-                                                                        <th scope="col" class="px-6 py-4">Handle</th>
-                                                                        <th scope="col" class="px-6 py-4">Handle</th>
+                                                                        <th scope="col" class="px-6 py-4">Date de la commande</th>
+                                                                        <th scope="col" class="px-6 py-4">Référence de la commande</th>
+                                                                        <th scope="col" class="px-6 py-4">Montant</th>
+                                                                        <th scope="col" class="px-6 py-4">Statut du paiement</th>
                                                                   </tr>
                                                             </thead>
                                                             <tbody>
-                                                                  <tr class="border-b dark:border-neutral-500">
-                                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Mark</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
+                                                            {% for order in app.user.orders %}
+                                                                  <tr class="text-center border-b dark:border-neutral-500">
+                                                                        {# Date de la commande  #}
+                                                                        <td class="whitespace-nowrap px-6 py-4">
+                                                                              {{ order.createdAt|date('d/m/Y') }}
+                                                                        </td>
+
+                                                                        {# Référence de la commande #}
+                                                                        <td class="whitespace-nowrap px-6 py-4">
+                                                                              {{ order.reference }}
+                                                                              <div class="flex">
+                                                                                    <a class="underline" href="{{ path('user.order.recap', { id: order.id }) }}">Voir détails</a>
+                                                                              </div>
+                                                                        </td>
+
+                                                                        {# Total de la commande #}
+                                                                        <td class="whitespace-nowrap px-6 py-4">
+                                                                              {{ (order.totalOrder / 100)|number_format(2, ',', '') }}€
+                                                                        </td>
+
+                                                                        {# Statut de paiement de la commande #}
+                                                                        {# Si la commande a été payée, on affiche "Paiement accepté" #}
+                                                                        {% if order.isPaid == true %}
+                                                                              <td class="whitespace-nowrap px-6 py-4">
+                                                                                    Paiement accepté
+                                                                              </td>
+                                                                        {# Sinon, on affiche "Paiement en attente" #}
+                                                                        {% else %}
+                                                                              <td class="whitespace-nowrap px-6 py-4">
+                                                                                    Paiement en attente
+                                                                              </td>
+                                                                        {% endif %}
                                                                   </tr>
-                                                                  <tr class="border-b dark:border-neutral-500">
-                                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">2</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Jacob</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Thornton</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@fat</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
-                                                                  </tr>
-                                                                  <tr class="border-b dark:border-neutral-500">
-                                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">3</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Larry</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Wild</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
-                                                                  </tr>
+                                                            {% endfor %}
                                                             </tbody>
                                                       </table>
                                                 </div>

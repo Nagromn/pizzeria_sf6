@@ -48,6 +48,9 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $paypalOrderId = null;
 
+    #[ORM\Column]
+    private ?float $totalOrder = null;
+
     #[ORM\OneToMany(mappedBy: 'orderProduct', targetEntity: OrderDetails::class)]
     private Collection $orderDetails;
 
@@ -177,6 +180,18 @@ class Order
     public function setPaypalOrderId(string $paypalOrderId): self
     {
         $this->paypalOrderId = $paypalOrderId;
+
+        return $this;
+    }
+
+    public function getTotalOrder(): ?float
+    {
+        return $this->totalOrder;
+    }
+
+    public function setTotalOrder(float $totalOrder): self
+    {
+        $this->totalOrder = $totalOrder;
 
         return $this;
     }

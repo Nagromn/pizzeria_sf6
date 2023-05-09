@@ -62,8 +62,6 @@ class OrderController extends AbstractController
 
         $form->handleRequest($request);
 
-        // dd($form->getData());
-
         if ($form->isSubmitted() && $form->isValid()) {
             $datetime = new \DateTime('now');
             $transporter = $form->get('transporter')->getData();
@@ -90,8 +88,9 @@ class OrderController extends AbstractController
                     ->setQuantity($product['quantity'])
                     ->setProduct($product['product']->getTitle())
                     ->setPrice($product['product']->getPrice())
-                    ->setProduct($product['product']->getTitle())
-                    ->setTotalOrder($product['product'])->getPrice() * $product['quantity'];
+                    ->setTotalProduct($product['product']->getPrice() * $product['quantity']);
+
+                $order->setTotalOrder(($orderDetails->getTotalProduct() * $product['quantity']) + $order->getTransporterPrice());
 
                 $this->em->persist($orderDetails);
             }

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Récapitulatif de votre commande{% endblock %}
+
+{% block body %}
+      {# Titre de la page du récapitulatif de la commande #}
+      <h2 class="font-medium leading-tight text-2xl text-custom-violet text-center mt-5 uppercase">Récapitulatif de votre commande {{ reference }}</h2>
+
+      {% for orderDetail in orderDetails %}
+            {{ dump(orderDetails)}}
+            <br>
+      {% endfor %}
+
+{% endblock %}

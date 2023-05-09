@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Form\UserPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +23,11 @@ class UserController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        // dd($user);
+        $orders = $user->getOrders();
 
         return $this->render('pages/users/profile.html.twig', [
-            'users' => $user
+            'user' => $user,
+            'orders' => $orders,
         ]);
     }
 
@@ -137,6 +137,33 @@ class UserController extends AbstractController
 
         return $this->render('pages/users/edit_email.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/utilisateur/récapitulatif-de-commande/{id}', 'user.order.recap', methods: ['GET', 'POST'])]
+    public function orderRecap(): Response
+    {
+
+        $user = $this->getUser();
+        $orders = $user->getOrders();
+
+        foreach ($orders as $order) {
+            $reference = $order->getReference();
+            $orderDetails = $order->getOrderDetails();
+        }
+
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
+        if ($this->getUser() !== $user) {
+            return $this->redirectToRoute('product.index');
+        }
+
+        return $this->render('pages/users/order_recap.html.twig', [
+            'user' => $user,
+            'orderDetails' => $orderDetails,
+            'reference' => $reference,
         ]);
     }
 }

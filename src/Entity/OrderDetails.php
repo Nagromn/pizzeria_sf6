@@ -23,11 +23,11 @@ class OrderDetails
     #[ORM\Column(length: 255)]
     private ?string $product = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private float $price;
 
-    #[ORM\Column(length: 255)]
-    private ?string $totalOrder = null;
+    #[ORM\Column]
+    private float $totalProduct;
 
     public function getId(): ?int
     {
@@ -82,14 +82,14 @@ class OrderDetails
         return $this;
     }
 
-    public function getTotalOrder(): ?string
+    public function getTotalProduct(): ?float
     {
-        return $this->totalOrder;
+        return $this->totalProduct;
     }
 
-    public function setTotalOrder(string $totalOrder): self
+    public function setTotalProduct(float $totalProduct): self
     {
-        $this->totalOrder = $totalOrder;
+        $this->totalProduct = $totalProduct;
 
         return $this;
     }
