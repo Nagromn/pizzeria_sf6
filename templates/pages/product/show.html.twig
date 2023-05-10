@@ -48,7 +48,7 @@
                         
                         {# Description du produit #}
                         <p class="text-custom-violet text-base mb-4">
-                              {{ product.description|raw }}
+                              {{ product.description|u.truncate(100, '...')|raw }}
                         </p>
 
                         {# Note moyenne du produit #}
@@ -64,7 +64,8 @@
                               {% endfor %}
                         </div>
 
-                        {# {% if is_granted('ROLE_USER') and product.isIsPaid(app.user) %} #}
+                        {# Si l'utilisateur est connecté, on affiche le formulaire de notation #}
+                        {% if app.user %}
                               {# Form de notation du produit #}
                               {{ form_start(form) }}
                                     <div class="flex justify-center">
@@ -75,13 +76,8 @@
                                                 {{ form_row(form.submit) }}
                                           </div>
                                     </div>
-                              {# Fin de formulaire #}
                               {{ form_end(form) }}
-                        {# {% endif %} #}
-
-
-
-                        
+                        {% endif %}
 
                         {# Prix du produit #}
                         <div class="flex justify-center mt-5">

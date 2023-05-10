@@ -44,51 +44,18 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get all pizzas
+     * Get all products by category
      *
+     * @param string $categoryName
      * @param int $page
-     * @return array
+     * @return PaginationInterface
      */
-    public function findAllPizza(int $page): PaginationInterface
+    public function findAllByCategory(string $categoryName, int $page): PaginationInterface
     {
         $data = $this->createQueryBuilder('p')
-            ->where('p.isVending = 1', 'p.category = 6')
-            ->getQuery()
-            ->getResult();
-
-        $products = $this->paginatorInterface->paginate($data, $page, 10);
-
-        return $products;
-    }
-
-    /**
-     * Get all drinks
-     *
-     * @param int $page
-     * @return array
-     */
-    public function findAllDrinks(int $page): PaginationInterface
-    {
-        $data = $this->createQueryBuilder('p')
-            ->where('p.isVending = 1', 'p.category = 8')
-            ->getQuery()
-            ->getResult();
-
-        $products = $this->paginatorInterface->paginate($data, $page, 10);
-
-        return $products;
-    }
-
-    /**
-     * Get all desserts
-     *
-     * @param int $page
-     * @return array
-     */
-    public function findAllDesserts(int $page): PaginationInterface
-    {
-        $data = $this->createQueryBuilder('p')
-            ->where('p.isVending = 1', 'p.category = 7')
+            ->join('p.category', 'c')
+            ->where('p.isVending = 1', 'c.name = :categoryName')
+            ->setParameter('categoryName', $categoryName)
             ->getQuery()
             ->getResult();
 

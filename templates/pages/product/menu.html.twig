@@ -102,8 +102,8 @@
                                                 {# Prix du produit #}
                                                 <span class="mt-1 text-2xl">{{ (product.price / 100)|number_format(2, ',', '') }}€</span>
 
-                                                {# Description du produit  #}
-                                                <span class="mt-2 text-center">{{ product.description|u.truncate(160, '...')|raw }}</span>
+                                                {# Description du produit #}
+                                                <span class="mt-2 break-all">{{ product.description|u.truncate(100, '...')|raw }}</span>
                                           </div>
                                     </div>
                               {% endfor %}
@@ -130,7 +130,7 @@
                                                       {{ pizza.title }}
                                                 </h5>
                                                 <span class="mt-1 text-2xl">{{ (pizza.price / 100)|number_format(2, ',', '') }}€</span>
-                                                <span class="mt-2 text-center">{{ pizza.description|raw }}</span>
+                                                <span class="mt-2 break-all">{{ pizza.description|u.truncate(100, '...')|raw }}</span>
                                           </div>
                               {% endfor %}
                         </div>
@@ -156,7 +156,7 @@
                                                       {{ drink.title }}
                                                 </h5>
                                                 <span class="mt-1 text-2xl">{{ (drink.price / 100)|number_format(2, ',', '') }}€</span>
-                                                <span class="mt-2 text-center">{{ drink.description|raw }}</span>
+                                                <span class="mt-2 break-all">{{ drink.description|u.truncate(100, '...')|raw }}</span>
                                           </div>
                               {% endfor %}
                         </div>
@@ -182,7 +182,7 @@
                                                       {{ dessert.title }}
                                                 </h5>
                                                 <span class="mt-1 text-2xl">{{ (dessert.price / 100)|number_format(2, ',', '') }}€</span>
-                                                <span class="mt-2 text-center">{{ dessert.description|raw }}</span>
+                                                <span class="mt-2 break-all">{{ dessert.description|u.truncate(100, '...')|raw }}</span>
                                           </div>
                               {% endfor %}
                         </div>

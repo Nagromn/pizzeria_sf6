@@ -95,7 +95,7 @@ class CartService
       }
 
       // Suppression du panier
-      public function removeCart(): array
+      public function removeCart()
       {
             return $this->getSession()->remove('cart');
       }

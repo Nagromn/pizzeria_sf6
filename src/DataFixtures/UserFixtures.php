@@ -29,7 +29,7 @@ class UserFixtures extends Fixture
                   ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
                   ->setPlainPassword('password')
                   ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTimeThisYear('Europe/Paris')))
-                  ->isIsVerified(true);
+                  ->setIsVerified(true);
 
             $users[] = $admin;
             $manager->persist($admin);

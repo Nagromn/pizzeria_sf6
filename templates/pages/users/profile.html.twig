@@ -13,7 +13,22 @@
       {% endfor %}
 
       {# Titre principal de la page #}
-      <h2 class="font-medium leading-tight text-4xl mt-10 text-center text-custom-violet">Profil de l'utilisateur</h2>
+      <h2 class="font-medium leading-tight text-4xl mt-10 text-center text-custom-violet">Votre compte utilisateur</h2>
+
+      {# Breackcrumb #}
+      <nav class="flex justify-center w-full rounded-md mt-5 mb-2">
+            <ol class="list-reset flex">
+                  <li class="text-custom-violet">
+                        <a href="{{ path('index') }}">Accueil</a>
+                  </li>
+                  <li>
+                        <span class="text-custom-violet mx-5">></span>
+                  </li>
+                  <li class="text-custom-dark-orange underline">
+                        <a href="{{ path('user.index') }}">Votre profil</a>
+                  </li>
+            </ol>
+      </nav>
 
       {# Container principal de la page utilisateur #}
       <div class="flex flex-row mb-10">
@@ -24,12 +39,12 @@
                         <div class="flex flex-row justify-between">
 
                               {# Première colonne #}
-                              <div class="flex flex-col">
+                              <div class="flex flex-col end">
                                     {# Nom / Prénom #}
                                     <p class="text-custom-violet leading-tight text-lg mb-5">Nom / Prénom :</p>
 
                                     {# Pseudo #}
-                                    <p class="text-custom-violet leading-tight text-lg mb-5">Pseudo :</p>
+                                    <p class="text-custom-violet leading-tight text-lg mb-5">Pseudo :</span></p>
 
                                     {# Adresse #}
                                     <p class="text-custom-violet leading-tight text-lg mb-5">Adresse :</p>
@@ -42,7 +57,7 @@
                               </div>
 
                               {# Deuxième colonne #}
-                              <div class="flex flex-col">
+                              <div class="flex flex-col text-end">
                                     {# Nom / Prénom  #}
                                     <p class="text-custom-violet leading-tight text-lg mb-5">{{ app.user.fullname }}</p>
 

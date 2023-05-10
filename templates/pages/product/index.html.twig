@@ -4,16 +4,15 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+      {# Affiche les messages flash success #}
+      {% for message in app.flashes('success') %}
+            <div class="bg-green-100 rounded-lg py-5 px-6 mb-4 text-base text-green-700" role="alert">
+                  {{ message }}
+            </div>
+      {% endfor %}
+
       {# Container #}
       <div class="container mx-auto">
-
-            {# Affiche les messages flash success #}
-            {% for message in app.flashes('success') %}
-                  <div class="bg-green-100 rounded-lg py-5 px-6 mb-4 text-base text-green-700" role="alert">
-                        {{ message }}
-                  </div>
-            {% endfor %}
-
             {# Navigation secondaire #}
             {% include "components/_subnavigation.html.twig" %}
 

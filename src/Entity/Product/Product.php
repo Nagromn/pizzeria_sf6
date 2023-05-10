@@ -82,6 +82,9 @@ class Product
     public function prePersist()
     {
         $this->slug = (new Slugify())->slugify($this->title);
+        if ($this->imageFile) {
+            $this->image = $this->imageFile->getFilename();
+        }
     }
 
     public function getId(): ?int

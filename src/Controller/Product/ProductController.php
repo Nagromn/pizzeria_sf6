@@ -4,7 +4,6 @@ namespace App\Controller\Product;
 
 use App\Entity\Mark;
 use App\Form\MarkType;
-use App\Form\ProductType;
 use App\Entity\Product\Product;
 use App\Repository\MarkRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProductController extends AbstractController
 {
+      /**
+       * Affichage de la liste des produits
+       *
+       * @param ProductRepository $productRepository
+       * @param Request $request
+       * @return Response
+       */
       #[Route('/', name: 'index', methods: ['GET'])]
       public function index(
             ProductRepository $productRepository,
@@ -26,36 +32,64 @@ class ProductController extends AbstractController
             ]);
       }
 
+      /**
+       * Affichage de la liste des pizzas
+       *
+       * @param ProductRepository $productRepository
+       * @param Request $request
+       * @return Response
+       */
       #[Route('/pizzas', name: 'product.pizzas', methods: ['GET'])]
       public function pizza(
             ProductRepository $productRepository,
             Request $request
       ): Response {
             return $this->render('pages/product/pizzas.html.twig', [
-                  'products' => $productRepository->findAllPizza($request->query->getInt('page', 1))
+                  'products' => $productRepository->findAllByCategory('Pizza', $request->query->getInt('page', 1))
             ]);
       }
 
+      /**
+       * Affichage de la liste des boissons
+       *
+       * @param ProductRepository $productRepository
+       * @param Request $request
+       * @return Response
+       */
       #[Route('/boissons', name: 'product.drinks', methods: ['GET'])]
       public function drinks(
             ProductRepository $productRepository,
             Request $request
       ): Response {
             return $this->render('pages/product/drinks.html.twig', [
-                  'products' => $productRepository->findAllDrinks($request->query->getInt('page', 1))
+                  'products' => $productRepository->findAllByCategory('Boisson', $request->query->getInt('page', 1))
             ]);
       }
 
+      /**
+       * Affichage de la liste des desserts
+       *
+       * @param ProductRepository $productRepository
+       * @param Request $request
+       * @return Response
+       */
       #[Route('/desserts', name: 'product.desserts', methods: ['GET'])]
       public function desserts(
             ProductRepository $productRepository,
             Request $request
       ): Response {
             return $this->render('pages/product/desserts.html.twig', [
-                  'products' => $productRepository->findAllDesserts($request->query->getInt('page', 1))
+                  'products' => $productRepository->findAllDesserts('Dessert', $request->query->getInt('page', 1))
             ]);
       }
 
+      /**
+       * Affichage du produit sélectionné
+       *
+       * @param ProductRepository $productRepository
+       * @param Request $request
+       * @return Response
+       */
       #[Route('produit/{slug}', name: 'product.show', methods: ['GET', 'POST'])]
       public function show(
             Product $product,
@@ -75,31 +109,12 @@ class ProductController extends AbstractController
             // Récupération de l'utilisateur connecté
             $user = $this->getUser();
 
-            // Récupération de toutes les commandes de l'utilisateur
-            $orders = $user->getOrders();
-
-            // Parcours de toutes les commandes de l'utilisateur
-            foreach ($orders as $order) {
-                  // Récupération des détails de la commande
-                  $orderDetails = $order->getOrderDetails();
-                  $isProductOrdered = false;
-                  foreach ($orderDetails as $orderDetail) {
-                        // Vérification si le produit de la commande correspond au produit souhaité
-
-                        if ($orderDetail->getProduct() === $product->getTitle() && $order->isIsPaid() === true) {
-                              // L'utilisateur a déjà commandé ce produit et la commande est payée
-                              // Vous pouvez faire ce que vous voulez ici (par exemple, l'empêcher de noter à nouveau)
-                              // Mettre la variable $isProductOrdered à true
-                              $isProductOrdered = true;
-
-                              // Sortir des deux boucles
-                              break 2;
-                        }
-                  }
-            }
-
             // Vérification si le formulaire a été soumis et est valide
             if ($form->isSubmitted() && $form->isValid()) {
+
+                  // Récupération de toutes les commandes de l'utilisateur
+                  $orders = $user->getOrders();
+
                   // Attribution de l'utilisateur et du produit à l'objet Mark
                   $mark->setUser($this->getUser())
                         ->setProduct($product);
@@ -109,6 +124,25 @@ class ProductController extends AbstractController
                         'user' => $this->getUser(),
                         'product' => $product
                   ]);
+
+                  foreach ($orders as $order) {
+                        // Récupération des détails de la commande
+                        $orderDetails = $order->getOrderDetails();
+                        $isProductOrdered = false;
+                        foreach ($orderDetails as $orderDetail) {
+                              // Vérification si le produit de la commande correspond au produit souhaité
+
+                              if ($orderDetail->getProduct() === $product->getTitle() && $order->isIsPaid() === true) {
+                                    // L'utilisateur a déjà commandé ce produit et la commande est payée
+                                    // Vous pouvez faire ce que vous voulez ici (par exemple, l'empêcher de noter à nouveau)
+                                    // Mettre la variable $isProductOrdered à true
+                                    $isProductOrdered = true;
+
+                                    // Sortir des deux boucles
+                                    break 2;
+                              }
+                        }
+                  }
 
                   // Vérification si l'utilisateur a acheté le produit actuel
                   if (!$isProductOrdered) {
@@ -152,60 +186,10 @@ class ProductController extends AbstractController
                   ]);
             }
 
+            // Affichage de la page du produit
             return $this->render('pages/product/show.html.twig', [
                   'product' => $product,
                   'form' => $form->createView()
             ]);
       }
-
-      #[Route('/produit/edition/{id}', name: 'product.edit', methods: ['GET', 'POST'])]
-      public function edit(
-            Product $product,
-            Request $request,
-            EntityManagerInterface $manager
-      ): Response {
-            $form = $this->createForm(ProductType::class, $product);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                  $product = $form->getData();
-
-                  $manager->persist($product);
-                  $manager->flush();
-
-                  $this->addFlash(
-                        'success',
-                        'Le produit a été modifié avec succès.'
-                  );
-
-                  return $this->redirectToRoute('product.index');
-            }
-
-            return $this->render('pages/product/edit_product.html.twig', [
-                  'form' => $form->createView()
-            ]);
-      }
-
-      #[Route('produit/suppression/{id}', 'product.delete', methods: ['GET'])]
-      public function delete(Product $product, EntityManagerInterface $manager): Response
-      {
-            $manager->remove($product);
-            $manager->flush();
-
-            $this->addFlash(
-                  'success',
-                  "Le produit a été supprimé avec succès."
-            );
-
-            return $this->redirectToRoute('product.index');
-      }
-
-      // On récupère les derniers id des produits enregistrés
-      // #[Route('/', name: 'index', methods: ['GET'])]
-      // public function findLastId(ProductRepository $productRepository, Request $request): Response
-      // {
-      //       return $this->render('pages/product/index.html.twig', [
-      //             'products' => $productRepository->findLastId($request->query->getInt('page', 1))
-      //       ]);
-      // }
 }

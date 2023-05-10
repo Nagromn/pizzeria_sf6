@@ -51,7 +51,7 @@ class Order
     #[ORM\Column]
     private ?float $totalOrder = null;
 
-    #[ORM\OneToMany(mappedBy: 'orderProduct', targetEntity: OrderDetails::class)]
+    #[ORM\OneToMany(mappedBy: 'orderProduct', targetEntity: OrderDetails::class, cascade: ['remove'])]
     private Collection $orderDetails;
 
     public function __construct()

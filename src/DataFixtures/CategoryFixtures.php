@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use Faker\Factory;
+// use Faker\Factory;
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -18,11 +18,13 @@ class CategoryFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        // $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 5; $i++) {
+        $categoryNames = ['Pizza', 'Boisson', 'Dessert'];
+
+        foreach ($categoryNames as $name) {
             $category = new Category();
-            $category->setName($faker->words(1, true))
+            $category->setName($name)
                 ->setSlug($this->slugger->slug($category->getName())->lower());
 
             $manager->persist($category);

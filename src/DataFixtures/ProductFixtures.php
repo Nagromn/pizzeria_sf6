@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Product\Product;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
@@ -20,6 +21,8 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
             $users = $manager->getRepository(User::class)->findAll();
             $products = [];
 
+            $imageFiles = glob('public/uploads/images/thumbnails/*');
+
             // Product
             for ($i = 0; $i < 20; $i++) {
                   $product = new Product();
@@ -31,7 +34,14 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
                         ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')))
                         ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->datetime('Europe/Paris')));
 
-                  // dd($product);
+                  // Choisissez un fichier image aléatoire
+                  $imageIndex = array_rand($imageFiles);
+                  $imagePath = $imageFiles[$imageIndex];
+
+                  // Utilisez VichUploader pour télécharger le fichier image
+                  $imageFile = new File($imagePath);
+                  $product->setImageFile($imageFile);
+
                   $products[] = $product;
                   $manager->persist($product);
             }
@@ -54,6 +64,8 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
       public function getDependencies(): array
       {
-            return [CategoryFixtures::class];
+            return [
+                  CategoryFixtures::class,
+            ];
       }
 }
