@@ -7,6 +7,7 @@ use Faker\Core\DateTime;
 use App\Form\RegistrationType;
 use App\Form\UserPasswordType;
 use App\Service\MailerService;
+use App\Form\ForgetPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -163,55 +164,126 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Permet de réinitialiser le mot de passe d'un utilisateur
+     * Permet de réinitialiser le mot de passe d'un utilisateur si utilisateur connecté
      *
      * @param EntityManagerInterface $manager
      * @param MailerService $mailerService
      * @param TokenGeneratorInterface $tokenGeneratorInterface
      * @return Response
      */
-    #[Route('/utilisateur/edition-mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+    #[Route('utilisateur/mot-de-passe-oublie/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
     public function editPassword(
         User $user,
+        Request $request,
+        EntityManagerInterface $manager,
+    ): Response {
+        // Si l'utilisateur n'est pas connecté
+        if (!$this->getUser()) {
+            $this->addFlash(
+                'danger',
+                'Vous devez être connecté pour modifier votre mot de passe.'
+            );
+            return $this->redirectToRoute('security.login');
+        }
+
+        // On vérifie que l'utilisateur connecté est bien l'utilisateur à éditer
+        if ($this->getUser() !== $user) {
+            $this->addFlash(
+                'danger',
+                'Vous devez être connecté pour modifier votre mot de passe.'
+            );
+            return $this->redirectToRoute('security.login');
+        }
+
+        // On crée le formulaire d'édition des informations de l'utilisateur
+        $form = $this->createForm(UserPasswordType::class);
+
+        // On traite la soumission du formulaire
+        $form->handleRequest($request);
+
+        // Si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // On met à jour le mot de passe de l'utilisateur dans la base de données
+            $manager->flush();
+
+            // On ajoute un message flash pour indiquer que la modification a réussi
+            $this->addFlash(
+                'success',
+                'Votre mot de passe a bien été modifié.'
+            );
+
+            // On redirige l'utilisateur vers son profil
+            return $this->redirectToRoute('user.index');
+        }
+
+        return $this->render('pages/users/edit_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Permet de la réinitialisation du mot de passe d'un utilisateur si mot de passe oublié
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param Service\MailerService $mailerService
+     * @param TokenGeneratorInterface $tokenGeneratorInterface
+     * @return Response
+     */
+    #[Route('/mot-de-passe-oublie', name: 'forget.password', methods: ['GET', 'POST'])]
+    public function forgetPassword(
+        Request $request,
         EntityManagerInterface $manager,
         Service\MailerService $mailerService,
         TokenGeneratorInterface $tokenGeneratorInterface
     ): Response {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
+
+        $form = $this->createForm(ForgetPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // je souhaite récupérer l'email de l'utilisateur en fonction de l'email rentré dans le formulaire
+            $user = $form->getData();
+
+            // Je souhaite savoir si cette adresse email est enregistré dans ma base de données
+            $user = $manager->getRepository(User::class)->findOneBy(['email' => $user]);
+
+            // Génération d'un token du mot de passe
+            $tokenPassword = $tokenGeneratorInterface->generateToken();
+
+            // On enregistre un token pour le mot de passe à l'utilisateur
+            $user->setTokenPassword($tokenPassword);
+
+            // Création du mail de confirmation de réinitialisation du mot de passe
+            $mailerService->send(
+                $user->getEmail(),
+                'Confirmation de réinitialisation de votre mot de passe',
+                'password_reset_confirmation.html.twig',
+                [
+                    'user' => $user,
+                    'token' => $tokenPassword,
+                    'lifeTimeToken' => $user->getTokenPasswordLifeTime()->format('d/m/Y à H:i:s')
+                ]
+            );
+
+            // Message flash de confirmation de la réinitialisation du mot de passe
+            $this->addFlash(
+                'success',
+                'Votre demande a bien été prise en compte. Veuillez confirmer votre demande de réinitialisation de mot de passe en cliquant sur le lien que vous avez reçu par email.'
+            );
+
+            // Insertion dans la base de données
+            $manager->persist($user);
+            $manager->flush();
+
+            // Redirection vers la page de connexion
+            return $this->redirectToRoute('forget.password');
         }
 
-        if ($this->getUser() !== $user) {
-            return $this->redirectToRoute('product.index');
-        }
-
-        // Génération d'un token du mot de passe
-        $tokenPassword = $tokenGeneratorInterface->generateToken();
-
-        // On enregistre un token pour le mot de passe à l'utilisateur
-        $user->setTokenPassword($tokenPassword);
-
-        // Création du mail de confirmation de réinitialisation du mot de passe
-        $mailerService->send(
-            $user->getEmail(),
-            'Confirmation de réinitialisation de votre mot de passe',
-            'password_reset_confirmation.html.twig',
-            [
-                'user' => $user,
-                'token' => $tokenPassword,
-                'lifeTimeToken' => $user->getTokenPasswordLifeTime()->format('d/m/Y à H:i:s')
-            ]
-        );
-
-        // Message flash de confirmation de la réinitialisation du mot de passe
-        $this->addFlash('success', 'Votre demande a bien été prise en compte. Veuillez confirmer votre demande de réinitialisation de mot de passe en cliquant sur le lien que vous avez reçu par email.');
-
-        // Insertion dans la base de données
-        $manager->persist($user);
-        $manager->flush();
-
-        // Redirection vers la page de connexion
-        return $this->redirectToRoute('user.index');
+        return $this->render('pages/users/forget_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -259,7 +331,7 @@ class SecurityController extends AbstractController
 
                 $this->addFlash(
                     'success',
-                    'Le mot de passe a été modifié avec succès.'
+                    'Le mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter.'
                 );
 
                 return $this->redirectToRoute('user.index');
