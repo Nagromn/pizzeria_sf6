@@ -184,6 +184,7 @@ class UserController extends AbstractController
             $reference = $order->getReference();
             $method = $order->getMethod();
             $isPaid = $order->isIsPaid();
+            $transporter = $order->getTransporterPrice();
             $totalOrder = $order->getTotalOrder();
         }
 
@@ -194,6 +195,7 @@ class UserController extends AbstractController
             'reference' => $reference,
             'method' => $method,
             'isPaid' => $isPaid,
+            'transporter' => $transporter,
             'totalOrder' => $totalOrder,
         ]);
     }

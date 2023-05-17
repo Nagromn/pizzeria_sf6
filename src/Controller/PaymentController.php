@@ -10,8 +10,6 @@ use Stripe\Checkout\Session;
 use App\Entity\Product\Product;
 use App\Controller\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -127,6 +125,9 @@ class PaymentController extends AbstractController
                         'transporter' => $transporter,
                   ]
             );
+
+            // Supprime le panier de la session une fois la commande validée
+            $cartService->removeCart();
 
             // Permet de valider le paiement de la commande sur dans la DB (booléen)
             $order->setIsPaid(true);

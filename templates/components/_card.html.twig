@@ -1,15 +1,13 @@
 {# Bloc 'Notre Sélection #}
-<div class="flex flex-row flex-wrap justify-between py-5">
-      <div class="flex flex-col justify-center">
-            <div class="flex justify-center">
-                  <h3 class="font-bold leading-tight text-2xl text-custom-violet">{{ product.title }}</h3>
-            </div>
-            <div class="flex justify-center mt-5">
-                  <img class="rounded-full w-50px" width="270" height="270" src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="{{ product.title }}"/>
-            </div>
-            <div class="flex justify-center mt-5">
-                  <a href="{{ path('product.show', {'slug': product.slug}) }}" class="inline-block border-2 border-custom-violet rounded-full py-4 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">En savoir <i class="fa-solid fa-plus text-sm"></i>
-                  </a>
-            </div>
+<div class="flex flex-col items-center justify-between max-w-xs text-custom-violet p-6 shadow-lg m-6 relative">
+      <div class="flex flex-col text-center items-center">
+            {# Nom du produit #}
+            <h3 class="font-bold leading-tight text-2xl text-center text-custom-violet mb-5">{{ product.title }}</h3>
+      </div>
+      <div class="flex flex-col text-center">
+            {# Image du produit #}
+            <img class="rounded-full mb-5" width="270" height="270" src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="{{ product.title }}"/>
+            {# Lien 'En savoir plus' #}
+            <a href="{{ path('product.show', {'slug': product.slug}) }}" class="inline-block border-2 border-custom-violet rounded-full py-4 px-10 bg-transaparent text-custom-violet font-bold leading-tight shadow-md hover:bg-gradient-to-r from-custom-dark-orange to-custom-light-orange hover:shadow-lg hover:text-white hover:border-white focus:bg-custom-dark-orange focus:shadow-lg focus:outline-none focus:ring-0 active:bg-custom-dark-orange active:shadow-lg transition duration-150 ease-in-out">En savoir <i class="fa-solid fa-plus text-sm"></i></a>
       </div>
 </div>

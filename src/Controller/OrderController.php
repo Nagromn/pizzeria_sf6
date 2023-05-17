@@ -41,6 +41,11 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('security.login');
         }
 
+        // Vérifie si le panier est vide, redirection vers le panier
+        if (!$cartService->getTotal()) {
+            return $this->redirectToRoute('cart');
+        }
+
         // Crée un formulaire pour la commande
         $form = $this->createForm(OrderType::class, [
             'user' => $this->getUser()
@@ -68,6 +73,11 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('security.login');
         }
 
+        // Vérifie si le panier est vide, redirection vers le panier
+        if (!$cartService->getTotal()) {
+            return $this->redirectToRoute('cart');
+        }
+
         // Création du formulaire de commande avec l'utilisateur connecté
         $form = $this->createForm(OrderType::class, [
             'user' => $this->getUser(),
@@ -78,6 +88,7 @@ class OrderController extends AbstractController
 
         // Si le formulaire a été soumis et qu'il est valide
         if ($form->isSubmitted() && $form->isValid()) {
+
             // Création d'une référence unique pour la commande
             $datetime = new \DateTime('now');
             $transporter = $form->get('transporter')->getData();
@@ -98,7 +109,8 @@ class OrderController extends AbstractController
                 ->setIsPaid(false)
                 ->setMethod('stripe');
 
-            $this->em->persist($order);
+            // Variable pour stocker le montant total de la commande
+            $totalOrder = 0;
 
             // Ajout des détails de commande pour chaque produit du panier
             foreach ($cartService->getTotal() as $product) {
@@ -109,12 +121,21 @@ class OrderController extends AbstractController
                     ->setPrice($product['product']->getPrice())
                     ->setTotalProduct($product['product']->getPrice() * $product['quantity']);
 
-                // Calcul du montant total de la commande
-                $order->setTotalOrder(($orderDetails->getTotalProduct() * $product['quantity']) + $order->getTransporterPrice());
+                // Accumulation du montant total de la commande
+                $totalOrder += $orderDetails->getTotalProduct();
 
                 // Persistance en base de données
                 $this->em->persist($orderDetails);
             }
+
+            // Ajout du montant du transporteur au montant total de la commande
+            $totalOrder += $order->getTransporterPrice();
+
+            // Affectation du montant total à la commande
+            $order->setTotalOrder($totalOrder);
+
+            // Persistance en base de données
+            $this->em->persist($order);
 
             // Enregistrement en base de données
             $this->em->flush();

@@ -37,7 +37,7 @@
             {# Bloc produits #}
             <div class="block max-w-full rounded-3xl bg-white shadow-full mt-10 p-6">
                   <h2 class="font-bold leading-tight text-custom-violet text-4xl text-center pt-10 mb-6">Notre Sélection</h2>
-                  <div class="flex flex-row flex-wrap justify-around">
+                  <div class="flex flex-row flex-wrap justify-evenly">
                         {% for product in products %}
                               {% include "components/_card.html.twig" with {product: product} only %}
                         {% endfor %}
